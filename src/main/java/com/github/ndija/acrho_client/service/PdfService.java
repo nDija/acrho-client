@@ -24,14 +24,14 @@ public class PdfService {
 
     private static final Logger log = Logger.getLogger(PdfService.class);
     private static SimpleDateFormat formatterRun = new SimpleDateFormat("h:mm:ss");
-    private static SimpleDateFormat formatterDate = new SimpleDateFormat("EEEE dd MMMM YYYY", new Locale("fr", "FR"));
+    private static SimpleDateFormat formatterDate = new SimpleDateFormat("EEEE dd MMMM yyyy", new Locale("fr", "FR"));
 
     static {
         formatterRun.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public static RunResult extract(String filename) throws AcrhoConnectionException, AcrhoPDFException {
-        String url = AcrhoProperties.get(AcrhoProperties.URL) + "/Resultats_Bury_220214.pdf";
+        String url = AcrhoProperties.get(AcrhoProperties.URL) + filename;
         InputStream is = HttpService.get(url);
         return extract(is);
     }
@@ -39,7 +39,7 @@ public class PdfService {
     public static RunResult extract(InputStream is) throws AcrhoPDFException {
         PDDocument doc = getDocument(is);
         PDFTextStripper stripper = getStripper();
-        String s = null;
+        String s;
         RunResult runResult = new RunResult();
         List<Result> results = new ArrayList<Result>();
         try {
@@ -53,7 +53,7 @@ public class PdfService {
                     setResultInfo(runResult, result);
                 }
                 for (int j = 5; j < result.length; j++) {
-                    Result res = getResult(result[j].split("/"));
+                    Result res = getResult(result[j]);
                     results.add(res);
                 }
             }
@@ -88,8 +88,8 @@ public class PdfService {
         return stripper;
     }
 
-    public static Result getResult(String[] result) throws AcrhoPDFException {
-
+    public static Result getResult(String line) throws AcrhoPDFException {
+        String[] result = line.split("/");
         Result res = new Result();
         res.setPlace(Integer.parseInt(result[0]));
         res.setBib(Integer.parseInt(result[1]));
@@ -97,9 +97,9 @@ public class PdfService {
         res.setFirstName(result[3]);
         
 
-        String team = null;
-        String category = null;
-        String time = null;
+        String team;
+        String category;
+        String time;
         // The standard
         if(result.length == 9) {
             category = result[5];
@@ -118,12 +118,12 @@ public class PdfService {
             time = result[5];
             res.setPoints(Integer.parseInt(result[7]));
         } else {
-            throw new AcrhoPDFException("Can't parse result: " + result);
+            throw new AcrhoPDFException("Can't parse result: " + line);
         }
         res.setTeam(team);
         res.setCategory(category);
         try {
-            res.setTime(new Long(formatterRun.parse(time).getTime()));
+            res.setTime(formatterRun.parse(time).getTime());
         } catch (ParseException e) {
             log.error("error when parsing time", e);
             throw new AcrhoPDFException("error when parsing time", e);
@@ -138,7 +138,7 @@ public class PdfService {
         String name = splitLine3[1];
         Integer runners = Integer.parseInt(splitLine3[3]);
         Long distance = new BigDecimal(splitLine4[3].replaceAll(",", ".")).multiply(new BigDecimal(1000)).longValue();
-        Date date = null;
+        Date date;
         try {
             date = formatterDate.parse(splitLine4[1]);
         } catch (ParseException e) {
