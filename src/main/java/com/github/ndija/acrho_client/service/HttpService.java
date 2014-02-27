@@ -33,7 +33,7 @@ public class HttpService {
      * Return the inputstream for the given url
      * 
      * @param url The url to reach
-     * @return An inputstream
+     * @return An {@link java.io.InputStream}
      * @throws AcrhoConnectionException if can't connect to the url specified
      */
     public static InputStream get(String url) throws AcrhoConnectionException {

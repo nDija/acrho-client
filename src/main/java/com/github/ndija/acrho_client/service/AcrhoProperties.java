@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 
 public class AcrhoProperties {
     private static Properties prop = null;
-    InputStream input = null;
 
     private static final Logger log = Logger.getLogger(AcrhoProperties.class);
 
