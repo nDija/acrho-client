@@ -77,7 +77,8 @@ public class Result {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(bib);
+        StringBuilder sb = new StringBuilder();
+        sb.append(bib);
         sb.append(" | ");
         sb.append(firstName).append(" ").append(lastName);
         sb.append(" | ");
