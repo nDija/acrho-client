@@ -19,9 +19,9 @@ public class PDFServiceTest {
         // Given
         String filename = "/Resultats_Bury_220214.pdf";
         String filename2 ="/Resultats_Dottignies_16022014.pdf";
-
+        String filename3 = "/Resultats_Blicquy_080314.pdf";
         // When
-        RunResult result = PdfService.extract(filename2);
+        RunResult result = PdfService.extract(filename3);
         List<Result> results = result.getResults();
 
         // Then

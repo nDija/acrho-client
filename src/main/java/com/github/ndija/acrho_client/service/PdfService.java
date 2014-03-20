@@ -63,6 +63,12 @@ public class PdfService {
             throw new AcrhoPDFException("error when reading pdf", e);
         }
         runResult.setResults(results);
+        try {
+            doc.close();
+        } catch (IOException e) {
+            log.error("error when closing pdf", e);
+            throw new AcrhoPDFException("error when closing pdf", e);
+        }
         return runResult;
     }
 
