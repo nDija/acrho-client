@@ -141,8 +141,13 @@ public class PdfService {
     private static void setResultInfo(RunResult runResult, String[] result) throws AcrhoPDFException {
         String[] splitLine3 = result[2].split("/");
         String[] splitLine4 = result[3].split("/");
-        String name = splitLine3[1];
-        Integer runners = Integer.parseInt(splitLine3[3]);
+        String name = splitLine3[1].replace(" Nombre de participants :", "");
+        Integer runners;
+        if (splitLine3.length == 3) {
+            runners = Integer.parseInt(splitLine3[2]);
+        } else {
+            runners = Integer.parseInt(splitLine3[3]);
+        }
         Long distance = new BigDecimal(splitLine4[3].replaceAll(",", ".")).multiply(new BigDecimal(1000)).longValue();
         Date date;
         try {

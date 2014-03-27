@@ -17,11 +17,12 @@ public class PDFServiceTest {
     @Test
     public void extractTest() throws AcrhoConnectionException, AcrhoPDFException {
         // Given
-        String filename = "/Resultats_Bury_220214.pdf";
-        String filename2 ="/Resultats_Dottignies_16022014.pdf";
-        String filename3 = "/Resultats_Blicquy_080314.pdf";
+        // String filename = "/Resultats_Bury_220214.pdf";
+        // String filename2 ="/Resultats_Dottignies_16022014.pdf";
+        // String filename3 = "/Resultats_Blicquy_080314.pdf";
+        String filename4 = "/Resultats_ILM_150314.pdf";
         // When
-        RunResult result = PdfService.extract(filename3);
+        RunResult result = PdfService.extract(filename4);
         List<Result> results = result.getResults();
 
         // Then
