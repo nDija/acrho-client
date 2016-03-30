@@ -7,8 +7,6 @@ public class Run {
 
 	private Long id;
 	
-	private Long orgId;
-	
 	private String name;
 	
 	private String type;
@@ -49,14 +47,6 @@ public class Run {
 		this.distance = distance;
 	}
 
-	public Long getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(Long orgId) {
-		this.orgId = orgId;
-	}
-
 	public Date getDate() {
 		return date;
 	}
@@ -67,7 +57,6 @@ public class Run {
 	
 	public String toString() {
 		return "id: " + id
-				+ ", orgId: " + orgId
 				+ ", name: " + name
 				+ ", distance: " + distance
 				+ ", type: " + type

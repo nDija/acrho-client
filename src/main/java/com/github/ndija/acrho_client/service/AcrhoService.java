@@ -53,7 +53,7 @@ public class AcrhoService {
 			Long idCourse = Long.valueOf(option.attr("value"));
 			if(idCourse == 0) continue;
 			Run run = new Run();
-			run.setOrgId(idCourse);
+			run.setId(idCourse);
 			String label = option.childNode(0).outerHtml().trim();
 			Matcher m = p.matcher(label);
 			if(m.matches()) {
