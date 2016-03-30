@@ -15,6 +15,8 @@ public class AcrhoProperties {
     public static String PROXY_ADRESS = "proxy.adress";
     public static String PROXY_PORT = "proxy.port";
     public static String URL_RESULT_RUNS = "url.result.runs";
+    public static String URL_RESULT_RUN = "url.result.run";
+    public static String URL_RESULT_RUN_PARAMETERS = "url.result.run.parameters";
     
     public static void load() {
         String filename = "acrho.properties";

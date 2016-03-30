@@ -43,7 +43,6 @@ public class AcrhoService {
 			throw new AcrhoConnectionException("Can't close inputStream on get: " + url, e);
 		}
 		log.debug(response);
-		System.out.println(response);
 		Document doc = Jsoup.parse(response);
 		Elements select = doc.getElementsByAttributeValue("name", "ant_search_courses");
 		Elements options = select.get(0).getElementsByTag("option");
@@ -69,5 +68,27 @@ public class AcrhoService {
 	
 	public String get(InputStream is) throws IOException {
 		return IOUtils.toString(is, StandardCharsets.UTF_8.name());
+	}
+	
+	public static void getResult(Long runId) throws AcrhoConnectionException {
+		String url = AcrhoProperties.get(AcrhoProperties.URL_RESULT_RUN);
+		String parameters = AcrhoProperties.get(AcrhoProperties.URL_RESULT_RUN_PARAMETERS);
+		parameters = parameters.replaceAll(":runId", String.valueOf(runId));
+		InputStream is = HttpService.post(url, parameters);
+		String response = null;
+		try {
+			response = IOUtils.toString(is, StandardCharsets.UTF_8.name());
+			is.close();
+		} catch (IOException e) {
+			throw new AcrhoConnectionException("Can't close inputStream on get: " + url, e);
+		}
+		log.debug(response);
+		Document doc = Jsoup.parse(response);
+		Elements table = doc.getElementsByAttributeValue("class", "speResults");
+		Elements tbody = table.get(0).getElementsByTag("tbody");
+		Elements trs = tbody.get(0).getElementsByTag("tr");
+		for (int i = 1; i < trs.size(); i++) {
+			Elements tds = trs.get(i).getElementsByTag("td");
+		}
 	}
 }

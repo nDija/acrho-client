@@ -24,4 +24,9 @@ public class GetResultTest {
 			System.out.println(run.toString());
 		}
 	}
+	
+	@Test
+	public void getRunResultTest() throws AcrhoConnectionException {
+		AcrhoService.getResult(441L);
+	}
 }
