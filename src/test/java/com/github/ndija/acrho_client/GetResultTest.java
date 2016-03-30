@@ -13,7 +13,6 @@ public class GetResultTest {
 
 	@Test
 	public void getListRunsTest() throws ParseException {
-		//http://www.acrho.org/cust_resultats.php?langue=french&cle_menus=1187970092
 		List<Run> runs;
 		try {
 			runs = AcrhoService.getRuns();
