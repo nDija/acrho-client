@@ -66,10 +66,6 @@ public class AcrhoService {
 		return runs;
 	}
 	
-	public String get(InputStream is) throws IOException {
-		return IOUtils.toString(is, StandardCharsets.UTF_8.name());
-	}
-	
 	public static void getResult(Long runId) throws AcrhoConnectionException {
 		String url = AcrhoProperties.get(AcrhoProperties.URL_RESULT_RUN);
 		String parameters = AcrhoProperties.get(AcrhoProperties.URL_RESULT_RUN_PARAMETERS);
@@ -77,7 +73,7 @@ public class AcrhoService {
 		InputStream is = HttpService.post(url, parameters);
 		String response = null;
 		try {
-			response = IOUtils.toString(is, StandardCharsets.UTF_8.name());
+			response = IOUtils.toString(is, StandardCharsets.ISO_8859_1.name());
 			is.close();
 		} catch (IOException e) {
 			throw new AcrhoConnectionException("Can't close inputStream on get: " + url, e);
@@ -87,8 +83,12 @@ public class AcrhoService {
 		Elements table = doc.getElementsByAttributeValue("class", "speResults");
 		Elements tbody = table.get(0).getElementsByTag("tbody");
 		Elements trs = tbody.get(0).getElementsByTag("tr");
+		log.debug("Results count: " + (trs.size() - 1));
 		for (int i = 1; i < trs.size(); i++) {
 			Elements tds = trs.get(i).getElementsByTag("td");
+			for (Element td : tds) {
+				log.debug(td.text());
+			}
 		}
 	}
 }
