@@ -30,6 +30,8 @@ public class AcrhoService {
 	
 	private static final String PATTERN_SELECT_RUN = "&nbsp;((?:\\w|\\s)*)\\s-\\s(\\d{2}\\/\\d{2}\\/\\d{4})\\s\\((\\d{2}[\\.]*[\\d]*)(?:\\w|\\s)*\\)";
 	
+	private static final String PATTERN_SELECT_ID_RUNNER = "cust_participants.php\\?langue\\=french\\&cle_menus=1187970092\\&cle_data=(\\d*)\\&origin\\=cust_resultats\\.php";
+	
 	private static final String PATTERN_DATE = "dd/MM/yyyy";
 	
 	/**
@@ -87,6 +89,7 @@ public class AcrhoService {
 	 * @author nDija
 	 */
 	public static List<Result> getResult(Long runId) throws AcrhoConnectionException {
+		Pattern p = Pattern.compile(PATTERN_SELECT_ID_RUNNER);
 		String url = AcrhoProperties.get(AcrhoProperties.URL_RESULT_RUN);
 		String parameters = AcrhoProperties.get(AcrhoProperties.URL_RESULT_RUN_PARAMETERS);
 		parameters = parameters.replaceAll(":runId", String.valueOf(runId));
@@ -133,6 +136,11 @@ public class AcrhoService {
 			result.setTeam(team);
 			result.setTime(time);
 			result.setUrlProfil(urlProfil);
+			
+			Matcher m = p.matcher(urlProfil);
+			if(m.matches()) {
+				result.setIdRunner(Long.valueOf(m.group(1)));
+			}
 			
 			log.debug(result.toString());
 			

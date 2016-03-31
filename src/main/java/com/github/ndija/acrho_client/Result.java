@@ -13,6 +13,7 @@ public class Result {
 	private BigDecimal speed;
 	private Integer points;
 	private String category;
+	private Long idRunner;
 	
 	public Integer getPosition() {
 		return position;
@@ -68,12 +69,17 @@ public class Result {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	public Long getIdRunner() {
+		return idRunner;
+	}
+	public void setIdRunner(Long idRunner) {
+		this.idRunner = idRunner;
+	}
 	
 	@Override
 	public String toString() {
 		return "Result [position=" + position + ", name=" + name + ", urlProfil=" + urlProfil + ", team=" + team
 				+ ", time=" + time + ", avg=" + avg + ", speed=" + speed + ", points=" + points + ", category="
-				+ category + ", hashCode()=" + hashCode() + "]";
+				+ category + ", idRunner=" + idRunner + ", hashCode()=" + hashCode() + "]";
 	}
-
 }
