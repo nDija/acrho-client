@@ -1,96 +1,79 @@
 package com.github.ndija.acrho_client;
 
+import java.math.BigDecimal;
 
 public class Result {
-    private Integer place;
-    private Integer bib;
-    private String firstName;
-    private String lastName;
-    private Long time;
-    private String team;
-    private Integer points;
-    private String category;
+	
+	private Integer position;
+	private String name;
+	private String urlProfil;
+	private String team;
+	private Long time;
+	private Long avg;
+	private BigDecimal speed;
+	private Integer points;
+	private String category;
+	
+	public Integer getPosition() {
+		return position;
+	}
+	public void setPosition(Integer position) {
+		this.position = position;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getUrlProfil() {
+		return urlProfil;
+	}
+	public void setUrlProfil(String urlProfil) {
+		this.urlProfil = urlProfil;
+	}
+	public String getTeam() {
+		return team;
+	}
+	public void setTeam(String team) {
+		this.team = team;
+	}
+	public Long getTime() {
+		return time;
+	}
+	public void setTime(Long time) {
+		this.time = time;
+	}
+	public Long getAvg() {
+		return avg;
+	}
+	public void setAvg(Long avg) {
+		this.avg = avg;
+	}
+	public BigDecimal getSpeed() {
+		return speed;
+	}
+	public void setSpeed(BigDecimal speed) {
+		this.speed = speed;
+	}
+	public Integer getPoints() {
+		return points;
+	}
+	public void setPoints(Integer points) {
+		this.points = points;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	@Override
+	public String toString() {
+		return "Result [position=" + position + ", name=" + name + ", urlProfil=" + urlProfil + ", team=" + team
+				+ ", time=" + time + ", avg=" + avg + ", speed=" + speed + ", points=" + points + ", category="
+				+ category + ", hashCode()=" + hashCode() + "]";
+	}
 
-    public Integer getPlace() {
-        return place;
-    }
-
-    public void setPlace(Integer place) {
-        this.place = place;
-    }
-
-    public Integer getBib() {
-        return bib;
-    }
-
-    public void setBib(Integer bib) {
-        this.bib = bib;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
-
-    public String getTeam() {
-        return team;
-    }
-
-    public void setTeam(String team) {
-        this.team = team;
-    }
-
-    public Integer getPoints() {
-        return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(bib);
-        sb.append(" | ");
-        sb.append(firstName).append(" ").append(lastName);
-        sb.append(" | ");
-        sb.append(team);
-        sb.append(" | ");
-        sb.append(category);
-        sb.append(" | ");
-        sb.append(place);
-        sb.append(" | ");
-        sb.append(time);
-        sb.append(" | ");
-        sb.append(points);
-        return sb.toString();
-    }
 }

@@ -7,15 +7,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
+import com.github.ndija.acrho_client.exception.AcrhoException;
 import com.github.ndija.acrho_client.service.AcrhoService;
 
 public class GetResultTest {
 
 	@Test
-	public void getListRunsTest() throws ParseException {
+	public void getListRunsTest() {
 		List<Run> runs;
 		try {
 			runs = AcrhoService.getRuns();
+		} catch (AcrhoException e) {
+			Assert.assertFalse(e.getMessage(), true);
+			return;
 		} catch (AcrhoConnectionException e) {
 			Assert.assertFalse(e.getMessage(), true);
 			return;
@@ -26,7 +30,7 @@ public class GetResultTest {
 	}
 	
 	@Test
-	public void getRunResultTest() throws AcrhoConnectionException {
+	public void getRunResultTest() throws AcrhoConnectionException, ParseException {
 		AcrhoService.getResult(441L);
 	}
 }
