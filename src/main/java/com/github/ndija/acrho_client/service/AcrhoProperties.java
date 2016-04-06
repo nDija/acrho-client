@@ -17,6 +17,7 @@ public class AcrhoProperties {
     public static String URL_RESULT_RUNS = "url.result.runs";
     public static String URL_RESULT_RUN = "url.result.run";
     public static String URL_RESULT_RUN_PARAMETERS = "url.result.run.parameters";
+    public static String URL_RUNNER_DETAILS = "url.runner.details";
     
     public static void load() {
         String filename = "acrho.properties";
