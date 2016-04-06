@@ -14,7 +14,7 @@ public class GetResultTest {
 
 	@Test
 	public void getListRunsTest() {
-		List<Run> runs;
+		List<RunDetails> runs;
 		try {
 			runs = AcrhoService.getRuns();
 		} catch (AcrhoException e) {
@@ -24,7 +24,7 @@ public class GetResultTest {
 			Assert.assertFalse(e.getMessage(), true);
 			return;
 		}
-		for (Run run : runs) {
+		for (RunDetails run : runs) {
 			System.out.println(run.toString());
 		}
 	}

@@ -42,6 +42,7 @@ public class HttpService {
 	 *             if can't connect to the url specified
 	 */
 	public static InputStream get(String url) throws AcrhoConnectionException {
+		log.debug("calling: " + url);
 		Proxy proxy = null;
 		if (!StringUtils.isEmpty(proxy_adress)) {
 			proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy_adress, proxy_port));

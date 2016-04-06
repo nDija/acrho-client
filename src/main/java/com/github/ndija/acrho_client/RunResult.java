@@ -9,7 +9,7 @@ public class RunResult {
     private Long distance;
     private Integer runners;
     private Date date;
-    private List<Result> results;
+    private List<ResultDetails> results;
 
     public String getName() {
         return name;
@@ -35,11 +35,11 @@ public class RunResult {
         this.runners = runners;
     }
 
-    public List<Result> getResults() {
+    public List<ResultDetails> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(List<ResultDetails> results) {
         this.results = results;
     }
 
