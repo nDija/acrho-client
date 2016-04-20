@@ -34,3 +34,7 @@ Get runner details:
 
 	AcrhoService.getRunner(runnerId);
 	
+## License
+
+WTFPL-2.0 © Vincent Hullaert
+	
