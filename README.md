@@ -1,5 +1,13 @@
 # ACRHO client
 
+## Presentation
+
+Client use to call web pages from [Acrho] (http://www.archo.org) and then parse html code to get informations:
+
+- All runs
+- Results by run
+- Runner details
+
 ## Installation
 
 ### as a maven dependency
