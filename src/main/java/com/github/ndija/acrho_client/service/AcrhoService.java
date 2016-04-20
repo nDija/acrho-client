@@ -165,7 +165,7 @@ public class AcrhoService {
 	 * @throws AcrhoConnectionException
 	 * @throws AcrhoException when parsing a date
 	 */
-	public static RunnerDetails getRunnerDetails(Long id) throws AcrhoConnectionException, AcrhoException {
+	public static RunnerDetails getRunner(Long id) throws AcrhoConnectionException, AcrhoException {
 		SimpleDateFormat sdf = new SimpleDateFormat(PATTERN_DATE);
 		String url = AcrhoProperties.get(AcrhoProperties.URL_RUNNER_DETAILS);
 		url = url.replaceAll(":id", String.valueOf(id));
