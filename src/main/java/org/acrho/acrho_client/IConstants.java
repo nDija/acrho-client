@@ -30,7 +30,7 @@ public interface IConstants {
 	
 	public static final String COMA = ",";
 	
-	public static final String POINT = ",";
+	public static final String POINT = ".";
 	
 	public static final String TBODY = "tbody";
 }
