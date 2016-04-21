@@ -1,4 +1,4 @@
-package com.github.ndija.acrho_client.exception;
+package org.acrho.acrho_client.exception;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

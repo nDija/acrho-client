@@ -1,4 +1,4 @@
-package com.github.ndija.acrho_client.exception;
+package org.acrho.acrho_client.exception;
 
 public class AcrhoConnectionException extends Exception {
 

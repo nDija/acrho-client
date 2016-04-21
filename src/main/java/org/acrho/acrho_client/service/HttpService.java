@@ -1,4 +1,4 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.acrho_client.service;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,10 +9,9 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 
+import org.acrho.acrho_client.exception.AcrhoConnectionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-
-import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
 
 public class HttpService {
 

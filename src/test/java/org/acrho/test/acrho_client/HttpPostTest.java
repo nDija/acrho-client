@@ -1,15 +1,14 @@
-package com.github.ndija.acrho_client;
+package org.acrho.test.acrho_client;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import org.acrho.acrho_client.service.AcrhoProperties;
+import org.acrho.acrho_client.service.HttpService;
+import org.acrho.acrho_client.service.IAcrhoProperties;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
-
-import com.github.ndija.acrho_client.service.AcrhoProperties;
-import com.github.ndija.acrho_client.service.HttpService;
-import com.github.ndija.acrho_client.service.IAcrhoProperties;
 
 
 public class HttpPostTest {

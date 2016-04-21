@@ -1,17 +1,5 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.acrho_client.service;
 
-import static com.github.ndija.acrho_client.IConstants.ANT_SEARCH_COURSES;
-import static com.github.ndija.acrho_client.IConstants.PAR1DESCR;
-import static com.github.ndija.acrho_client.IConstants.PATTERN_DATE;
-import static com.github.ndija.acrho_client.IConstants.SPERESULTS;
-import static com.github.ndija.acrho_client.IConstants.SPEVALUE;
-import static com.github.ndija.acrho_client.IConstants._0;
-import static com.github.ndija.acrho_client.service.IAcrhoProperties.PARAM_ID;
-import static com.github.ndija.acrho_client.service.IAcrhoProperties.PARAM_RUN_ID;
-import static com.github.ndija.acrho_client.service.IAcrhoProperties.URL_RESULT_RUN;
-import static com.github.ndija.acrho_client.service.IAcrhoProperties.URL_RESULT_RUNS;
-import static com.github.ndija.acrho_client.service.IAcrhoProperties.URL_RESULT_RUN_PARAMETERS;
-import static com.github.ndija.acrho_client.service.IAcrhoProperties.URL_RUNNER_DETAILS;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.swing.text.html.HTML.Attribute.CLASS;
@@ -21,6 +9,18 @@ import static javax.swing.text.html.HTML.Tag.H1;
 import static javax.swing.text.html.HTML.Tag.OPTION;
 import static javax.swing.text.html.HTML.Tag.TD;
 import static javax.swing.text.html.HTML.Tag.TR;
+import static org.acrho.acrho_client.IConstants.ANT_SEARCH_COURSES;
+import static org.acrho.acrho_client.IConstants.PAR1DESCR;
+import static org.acrho.acrho_client.IConstants.PATTERN_DATE;
+import static org.acrho.acrho_client.IConstants.SPERESULTS;
+import static org.acrho.acrho_client.IConstants.SPEVALUE;
+import static org.acrho.acrho_client.IConstants._0;
+import static org.acrho.acrho_client.service.IAcrhoProperties.PARAM_ID;
+import static org.acrho.acrho_client.service.IAcrhoProperties.PARAM_RUN_ID;
+import static org.acrho.acrho_client.service.IAcrhoProperties.URL_RESULT_RUN;
+import static org.acrho.acrho_client.service.IAcrhoProperties.URL_RESULT_RUNS;
+import static org.acrho.acrho_client.service.IAcrhoProperties.URL_RESULT_RUN_PARAMETERS;
+import static org.acrho.acrho_client.service.IAcrhoProperties.URL_RUNNER_DETAILS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,18 +29,17 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.acrho.acrho_client.ResultDetails;
+import org.acrho.acrho_client.RunDetails;
+import org.acrho.acrho_client.RunnerDetails;
+import org.acrho.acrho_client.exception.AcrhoConnectionException;
+import org.acrho.acrho_client.exception.AcrhoException;
+import org.acrho.acrho_client.exception.UtilException;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
-import com.github.ndija.acrho_client.ResultDetails;
-import com.github.ndija.acrho_client.RunDetails;
-import com.github.ndija.acrho_client.RunnerDetails;
-import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
-import com.github.ndija.acrho_client.exception.AcrhoException;
-import com.github.ndija.acrho_client.exception.UtilException;
 
 public class AcrhoService {
 

@@ -1,8 +1,8 @@
-package com.github.ndija.acrho_client;
+package org.acrho.acrho_client;
 
-import static com.github.ndija.acrho_client.IConstants.PATTERN_DATE;
-import static com.github.ndija.acrho_client.IConstants.PATTERN_SELECT_RUN;
 import static javax.swing.text.html.HTML.Attribute.VALUE;
+import static org.acrho.acrho_client.IConstants.PATTERN_DATE;
+import static org.acrho.acrho_client.IConstants.PATTERN_SELECT_RUN;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -11,11 +11,10 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.acrho.acrho_client.exception.AcrhoException;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Element;
-
-import com.github.ndija.acrho_client.exception.AcrhoException;
 
 public class RunDetails {
 

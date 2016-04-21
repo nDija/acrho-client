@@ -1,4 +1,4 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.acrho_client.service;
 
 public interface IAcrhoProperties {
 

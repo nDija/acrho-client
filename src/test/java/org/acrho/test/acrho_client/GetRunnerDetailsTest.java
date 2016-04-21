@@ -1,13 +1,13 @@
-package com.github.ndija.acrho_client;
+package org.acrho.test.acrho_client;
 
 import java.text.ParseException;
 
+import org.acrho.acrho_client.RunnerDetails;
+import org.acrho.acrho_client.exception.AcrhoConnectionException;
+import org.acrho.acrho_client.exception.AcrhoException;
+import org.acrho.acrho_client.service.AcrhoService;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
-import com.github.ndija.acrho_client.exception.AcrhoException;
-import com.github.ndija.acrho_client.service.AcrhoService;
 
 public class GetRunnerDetailsTest {
 

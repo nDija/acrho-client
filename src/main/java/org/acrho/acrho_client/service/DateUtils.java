@@ -1,10 +1,10 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.acrho_client.service;
 
-import static com.github.ndija.acrho_client.IConstants.EMPTY_STRING;
-import static com.github.ndija.acrho_client.IConstants.H;
-import static com.github.ndija.acrho_client.IConstants.M;
+import static org.acrho.acrho_client.IConstants.EMPTY_STRING;
+import static org.acrho.acrho_client.IConstants.H;
+import static org.acrho.acrho_client.IConstants.M;
 
-import com.github.ndija.acrho_client.IConstants;
+import org.acrho.acrho_client.IConstants;
 
 public class DateUtils {
 

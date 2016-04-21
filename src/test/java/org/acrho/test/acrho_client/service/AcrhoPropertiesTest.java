@@ -1,5 +1,7 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.test.acrho_client.service;
 
+import org.acrho.acrho_client.service.AcrhoProperties;
+import org.acrho.acrho_client.service.IAcrhoProperties;
 import org.junit.Assert;
 import org.junit.Test;
 

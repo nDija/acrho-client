@@ -1,19 +1,18 @@
-package com.github.ndija.acrho_client;
+package org.acrho.acrho_client;
 
-import static com.github.ndija.acrho_client.IConstants.EMPTY_STRING;
-import static com.github.ndija.acrho_client.IConstants.NBSP;
-import static com.github.ndija.acrho_client.IConstants.PATTERN_SELECT_ID_RUNNER;
 import static javax.swing.text.html.HTML.Attribute.HREF;
 import static javax.swing.text.html.HTML.Tag.A;
+import static org.acrho.acrho_client.IConstants.EMPTY_STRING;
+import static org.acrho.acrho_client.IConstants.NBSP;
+import static org.acrho.acrho_client.IConstants.PATTERN_SELECT_ID_RUNNER;
 
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.acrho.acrho_client.service.DateUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.select.Elements;
-
-import com.github.ndija.acrho_client.service.DateUtils;
 
 public class ResultDetails {
 	

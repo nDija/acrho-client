@@ -1,15 +1,16 @@
-package com.github.ndija.acrho_client;
+package org.acrho.test.acrho_client;
 
 import java.text.ParseException;
 import java.util.List;
 
+import org.acrho.acrho_client.ResultDetails;
+import org.acrho.acrho_client.RunDetails;
+import org.acrho.acrho_client.exception.AcrhoConnectionException;
+import org.acrho.acrho_client.exception.AcrhoException;
+import org.acrho.acrho_client.service.AcrhoService;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
-import com.github.ndija.acrho_client.exception.AcrhoException;
-import com.github.ndija.acrho_client.service.AcrhoService;
 
 public class GetResultTest {
 
