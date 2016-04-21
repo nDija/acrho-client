@@ -8,7 +8,7 @@ public class AcrhoPropertiesTest {
     @Test
     public void getTest() {
         // Given
-        String key = AcrhoProperties.URL;
+        String key = IAcrhoProperties.URL;
         // When
         String url = AcrhoProperties.get(key);
         // Then

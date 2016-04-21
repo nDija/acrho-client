@@ -18,7 +18,7 @@ public class HttpServiceTest {
     @Test
     public void getTest() throws AcrhoConnectionException, IOException {
         // Given
-        String url = AcrhoProperties.get(AcrhoProperties.URL) + "/Resultats_Bury_220214.pdf";
+        String url = AcrhoProperties.get(IAcrhoProperties.URL) + "/Resultats_Bury_220214.pdf";
         // When
         InputStream is = HttpService.get(url);
         // Then

@@ -1,6 +1,19 @@
 package com.github.ndija.acrho_client;
 
+import static com.github.ndija.acrho_client.IConstants.EMPTY_STRING;
+import static com.github.ndija.acrho_client.IConstants.NBSP;
+import static com.github.ndija.acrho_client.IConstants.PATTERN_SELECT_ID_RUNNER;
+import static javax.swing.text.html.HTML.Attribute.HREF;
+import static javax.swing.text.html.HTML.Tag.A;
+
 import java.math.BigDecimal;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.log4j.Logger;
+import org.jsoup.select.Elements;
+
+import com.github.ndija.acrho_client.service.DateUtils;
 
 public class ResultDetails {
 	
@@ -15,6 +28,38 @@ public class ResultDetails {
 	private String category;
 	private Long idRunner;
 	
+	private static final Logger log = Logger.getLogger(ResultDetails.class);
+	
+	private static Pattern p = Pattern.compile(PATTERN_SELECT_ID_RUNNER);
+	
+	public ResultDetails(Elements tds) {
+		Integer position = Integer.parseInt(tds.get(0).text());
+		String name = tds.get(1).text().replaceAll(NBSP, EMPTY_STRING);
+		String urlProfil = tds.get(1).getElementsByTag(A.toString()).get(0).attr(HREF.toString());
+		String team = tds.get(2).text();
+		Long time = DateUtils.getMillis(tds.get(3).text());
+		Long avg = DateUtils.getMillis(tds.get(4).text());
+		BigDecimal speed = new BigDecimal(tds.get(5).text().replaceAll(",", "."));
+		Integer points = new Integer(tds.get(6).text());
+		String category = tds.get(7).text();
+
+		setAvg(avg);
+		setCategory(category);
+		setName(name);
+		setPoints(points);
+		setPosition(position);
+		setSpeed(speed);
+		setTeam(team);
+		setTime(time);
+		setUrlProfil(urlProfil);
+
+		Matcher m = p.matcher(urlProfil);
+		if (m.matches()) {
+			setIdRunner(Long.valueOf(m.group(1)));
+		}
+
+		log.debug(toString());
+	}
 	public Integer getPosition() {
 		return position;
 	}

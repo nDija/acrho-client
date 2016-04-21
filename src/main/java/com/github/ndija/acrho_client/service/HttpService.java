@@ -25,8 +25,8 @@ public class HttpService {
 	private static String USER_AGENT = "Mozilla/5.0";
 
 	static {
-		proxy_adress = AcrhoProperties.get(AcrhoProperties.PROXY_ADRESS);
-		String port = AcrhoProperties.get(AcrhoProperties.PROXY_PORT);
+		proxy_adress = AcrhoProperties.get(IAcrhoProperties.PROXY_ADRESS);
+		String port = AcrhoProperties.get(IAcrhoProperties.PROXY_PORT);
 		if (!StringUtils.isEmpty(port)) {
 			proxy_port = Integer.valueOf(port);
 		}

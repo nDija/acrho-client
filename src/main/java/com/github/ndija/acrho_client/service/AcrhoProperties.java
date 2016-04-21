@@ -6,25 +6,16 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-public class AcrhoProperties {
+public class AcrhoProperties implements IAcrhoProperties {
     private static Properties prop = null;
 
     private static final Logger log = Logger.getLogger(AcrhoProperties.class);
 
-    public static String URL = "url";
-    public static String PROXY_ADRESS = "proxy.adress";
-    public static String PROXY_PORT = "proxy.port";
-    public static String URL_RESULT_RUNS = "url.result.runs";
-    public static String URL_RESULT_RUN = "url.result.run";
-    public static String URL_RESULT_RUN_PARAMETERS = "url.result.run.parameters";
-    public static String URL_RUNNER_DETAILS = "url.runner.details";
-    
     public static void load() {
-        String filename = "acrho.properties";
 
-        InputStream input = AcrhoProperties.class.getClassLoader().getResourceAsStream(filename);
+        InputStream input = AcrhoProperties.class.getClassLoader().getResourceAsStream(PROPERTIES_FILENAME);
         if (input == null) {
-            log.error("Sorry, unable to find " + filename);
+            log.error("Sorry, unable to find " + PROPERTIES_FILENAME);
             return;
         }
 
