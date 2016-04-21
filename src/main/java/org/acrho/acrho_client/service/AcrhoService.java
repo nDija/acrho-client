@@ -14,6 +14,7 @@ import static org.acrho.acrho_client.IConstants.PAR1DESCR;
 import static org.acrho.acrho_client.IConstants.PATTERN_DATE;
 import static org.acrho.acrho_client.IConstants.SPERESULTS;
 import static org.acrho.acrho_client.IConstants.SPEVALUE;
+import static org.acrho.acrho_client.IConstants.TBODY;
 import static org.acrho.acrho_client.IConstants._0;
 import static org.acrho.acrho_client.service.IAcrhoProperties.PARAM_ID;
 import static org.acrho.acrho_client.service.IAcrhoProperties.PARAM_RUN_ID;
@@ -105,7 +106,7 @@ public class AcrhoService {
 
 		Document doc = Jsoup.parse(response);
 		Elements trResults = doc.getElementsByAttributeValue(CLASS.toString(), SPERESULTS)
-			.get(0).getElementsByTag("tbody")
+			.get(0).getElementsByTag(TBODY)
 			.get(0).getElementsByTag(TR.toString());
 		
 		trResults.remove(0);

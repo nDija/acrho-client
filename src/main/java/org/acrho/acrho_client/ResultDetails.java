@@ -2,9 +2,11 @@ package org.acrho.acrho_client;
 
 import static javax.swing.text.html.HTML.Attribute.HREF;
 import static javax.swing.text.html.HTML.Tag.A;
+import static org.acrho.acrho_client.IConstants.COMA;
 import static org.acrho.acrho_client.IConstants.EMPTY_STRING;
 import static org.acrho.acrho_client.IConstants.NBSP;
 import static org.acrho.acrho_client.IConstants.PATTERN_SELECT_ID_RUNNER;
+import static org.acrho.acrho_client.IConstants.POINT;
 
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
@@ -38,7 +40,7 @@ public class ResultDetails {
 		String team = tds.get(2).text();
 		Long time = DateUtils.getMillis(tds.get(3).text());
 		Long avg = DateUtils.getMillis(tds.get(4).text());
-		BigDecimal speed = new BigDecimal(tds.get(5).text().replaceAll(",", "."));
+		BigDecimal speed = new BigDecimal(tds.get(5).text().replaceAll(COMA, POINT));
 		Integer points = new Integer(tds.get(6).text());
 		String category = tds.get(7).text();
 

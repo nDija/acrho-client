@@ -27,4 +27,10 @@ public interface IConstants {
 	public static final String M = "m";
 
 	public static final String H = "h";
+	
+	public static final String COMA = ",";
+	
+	public static final String POINT = ",";
+	
+	public static final String TBODY = "tbody";
 }
