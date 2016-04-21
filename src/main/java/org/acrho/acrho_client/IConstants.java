@@ -2,7 +2,7 @@ package org.acrho.acrho_client;
 
 public interface IConstants {
 
-	public static final String PATTERN_SELECT_RUN = "&nbsp;((?:\\w|\\s)*)\\s-\\s(\\d{2}\\/\\d{2}\\/\\d{4})\\s\\((\\d{2}[\\.]*[\\d]*)(?:\\w|\\s)*\\)";
+	public static final String PATTERN_SELECT_RUN = "&nbsp;((?:\\w|\\s)*)\\s-\\s(\\d{2}\\/\\d{2}\\/\\d{4})\\s\\(([\\d]*[\\.]*[\\d]*)(?:\\w|\\s)*\\)";
 
 	public static final String PATTERN_SELECT_ID_RUNNER = "cust_participants.php\\?langue\\=french\\&cle_menus=1187970092\\&cle_data=(\\d*)\\&origin\\=cust_resultats\\.php";
 
