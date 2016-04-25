@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class GetResultTest {
 
-	private static final Logger log = Logger.getLogger(GetResultTest.class);
+	private static final Logger LOG = Logger.getLogger(GetResultTest.class);
 	
 	@Test
 	public void getListRunsTest() {
@@ -30,7 +30,7 @@ public class GetResultTest {
 		}
 		Assert.assertNotEquals(0, runs.size());
 		for (RunDetails run : runs) {
-			log.debug(run.toString());
+			LOG.debug(run.toString());
 		}
 	}
 	

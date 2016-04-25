@@ -9,13 +9,13 @@ import org.apache.log4j.Logger;
 public class AcrhoProperties implements IAcrhoProperties {
     private static Properties prop = null;
 
-    private static final Logger log = Logger.getLogger(AcrhoProperties.class);
+    private static final Logger LOG = Logger.getLogger(AcrhoProperties.class);
 
     public static void load() {
 
         InputStream input = AcrhoProperties.class.getClassLoader().getResourceAsStream(PROPERTIES_FILENAME);
         if (input == null) {
-            log.error("Sorry, unable to find " + PROPERTIES_FILENAME);
+            LOG.error("Sorry, unable to find " + PROPERTIES_FILENAME);
             return;
         }
 
@@ -25,7 +25,7 @@ public class AcrhoProperties implements IAcrhoProperties {
             prop.load(input);
         } catch (IOException e) {
             prop = null;
-            log.error(e);
+            LOG.error(e);
         }
     }
 

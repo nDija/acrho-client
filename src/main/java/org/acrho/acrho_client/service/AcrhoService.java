@@ -42,10 +42,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+/**
+ * Main service class for retrieving information from the site acrho.org
+ * 
+ * @author Vincent Hullaert
+ *
+ */
 public class AcrhoService {
 
-	private static final Logger log = Logger.getLogger(AcrhoService.class);
-
+	/**
+	 * The logger
+	 */
+	private static final Logger LOG = Logger.getLogger(AcrhoService.class);
 
 	/**
 	 * Call by http get method acrho.org menu result by runs and parse html and
@@ -56,8 +64,6 @@ public class AcrhoService {
 	 *             when failing to connect to arcrho.org
 	 * @throws AcrhoException
 	 *             when bad parsing date of the run
-	 * @author nDija
-	 * 
 	 */
 	public static List<RunDetails> getRuns() throws AcrhoConnectionException, AcrhoException {
 		String url = AcrhoProperties.get(URL_RESULT_RUNS);
@@ -69,11 +75,11 @@ public class AcrhoService {
 		} catch (IOException e) {
 			throw new AcrhoConnectionException("Can't close inputStream on get: " + url, e);
 		}
-		log.debug(response);
+		LOG.debug(response);
 		Elements options = Jsoup.parse(response)
 				.getElementsByAttributeValue(NAME.toString(), ANT_SEARCH_COURSES).get(0)
 				.getElementsByTag(OPTION.toString());
-		log.debug("Found courses: " + (options.size() - 1));
+		LOG.debug("Found courses: " + (options.size() - 1));
 		List<RunDetails> runs = options.stream()
 				.filter((option) -> !option.attr(VALUE.toString()).equals(_0))
 				.map(UtilException.rethrowFunction(option -> new RunDetails(option)))
@@ -82,6 +88,7 @@ public class AcrhoService {
 	}
 
 	/**
+	 * Get a list of results by run id
 	 * 
 	 * @param runId
 	 *            The id of the run
@@ -91,8 +98,8 @@ public class AcrhoService {
 	 */
 	public static List<ResultDetails> getResult(Long runId) throws AcrhoConnectionException {
 		String url = AcrhoProperties.get(URL_RESULT_RUN);
-		String parameters = AcrhoProperties.get(URL_RESULT_RUN_PARAMETERS);
-		parameters = parameters.replaceAll(PARAM_RUN_ID, String.valueOf(runId));
+		String parameters = AcrhoProperties.get(URL_RESULT_RUN_PARAMETERS)
+				.replaceAll(PARAM_RUN_ID, String.valueOf(runId));
 		InputStream is = HttpService.post(url, parameters);
 		String response = null;
 		try {
@@ -102,35 +109,34 @@ public class AcrhoService {
 			throw new AcrhoConnectionException("Can't close inputStream on get: " + url, e);
 		}
 
-		log.debug(response);
+		LOG.debug(response);
 
 		Document doc = Jsoup.parse(response);
-		Elements trResults = doc.getElementsByAttributeValue(CLASS.toString(), SPERESULTS)
-			.get(0).getElementsByTag(TBODY)
-			.get(0).getElementsByTag(TR.toString());
-		
+		Elements trResults = doc.getElementsByAttributeValue(CLASS.toString(), SPERESULTS).get(0)
+				.getElementsByTag(TBODY).get(0).getElementsByTag(TR.toString());
+
 		trResults.remove(0);
-		log.debug("Results count: " + trResults.size());
+		LOG.debug("Results count: " + trResults.size());
 		List<ResultDetails> results = trResults.stream()
-			.map(tr -> tr.getElementsByTag(TD.toString()))
-			.map(tds -> new ResultDetails(tds))
-			.collect(Collectors.toList());
-		
+				.map(tr -> tr.getElementsByTag(TD.toString()))
+				.map(tds -> new ResultDetails(tds)).collect(Collectors.toList());
+
 		return results;
 	}
 
 	/**
+	 * Get details for a runner according to his acrho id
 	 * 
 	 * @param id
-	 * @return
+	 *            The acrho id
+	 * @return The details of the runner
 	 * @throws AcrhoConnectionException
 	 * @throws AcrhoException
 	 *             when parsing a date
 	 */
 	public static RunnerDetails getRunner(Long id) throws AcrhoConnectionException, AcrhoException {
 		SimpleDateFormat sdf = new SimpleDateFormat(PATTERN_DATE);
-		String url = AcrhoProperties.get(URL_RUNNER_DETAILS);
-		url = url.replaceAll(PARAM_ID, String.valueOf(id));
+		String url = AcrhoProperties.get(URL_RUNNER_DETAILS).replaceAll(PARAM_ID, String.valueOf(id));
 		InputStream is = HttpService.get(url);
 		String response = null;
 		try {
@@ -139,7 +145,7 @@ public class AcrhoService {
 		} catch (IOException e) {
 			throw new AcrhoConnectionException("Can't close inputStream on get: " + url, e);
 		}
-		log.debug(response);
+		LOG.debug(response);
 
 		Document doc = Jsoup.parse(response);
 		String name = doc.getElementsByAttributeValue(CLASS.toString(), PAR1DESCR).get(0)

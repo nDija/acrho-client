@@ -1,5 +1,10 @@
 package org.acrho.acrho_client;
 
+/**
+ * interface for static variable 
+ * @author Vincent Hullaert
+ *
+ */
 public interface IConstants {
 
 	public static final String PATTERN_SELECT_RUN = "&nbsp;((?:\\w|\\s)*)\\s-\\s(\\d{2}\\/\\d{2}\\/\\d{4})\\s\\(([\\d]*[\\.]*[\\d]*)(?:\\w|\\s)*\\)";

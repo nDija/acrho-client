@@ -13,13 +13,10 @@ import java.util.regex.Pattern;
 
 import org.acrho.acrho_client.exception.AcrhoException;
 import org.apache.commons.lang3.text.WordUtils;
-import org.apache.log4j.Logger;
 import org.jsoup.nodes.Element;
 
 public class RunDetails {
 
-	private static final Logger log = Logger.getLogger(RunDetails.class);
-	
 	private SimpleDateFormat sdf = new SimpleDateFormat(PATTERN_DATE);
 	
 	private static Pattern p = Pattern.compile(PATTERN_SELECT_RUN);
@@ -49,7 +46,6 @@ public class RunDetails {
 				throw new AcrhoException("Error when parsing date: " + m.group(2), e);
 			}
 			distance = new BigDecimal(m.group(3));
-			log.debug("Run: " + this.toString());
 		}
 	}
 	
