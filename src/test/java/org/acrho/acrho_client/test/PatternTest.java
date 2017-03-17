@@ -1,4 +1,4 @@
-package org.acrho.test.acrho_client;
+package org.acrho.acrho_client.test;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package org.acrho.test.acrho_client.service;
+package org.acrho.acrho_client.service.test;
 
 import java.io.IOException;
 import java.io.InputStream;

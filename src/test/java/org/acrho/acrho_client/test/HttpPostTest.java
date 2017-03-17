@@ -1,4 +1,4 @@
-package org.acrho.test.acrho_client;
+package org.acrho.acrho_client.test;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

@@ -1,4 +1,4 @@
-package org.acrho.test.acrho_client.service;
+package org.acrho.acrho_client.service.test;
 
 import org.acrho.acrho_client.service.AcrhoProperties;
 import org.acrho.acrho_client.service.IAcrhoProperties;
