@@ -1,13 +1,15 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.acrho_client.service.test;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.acrho.acrho_client.exception.AcrhoConnectionException;
+import org.acrho.acrho_client.service.AcrhoProperties;
+import org.acrho.acrho_client.service.HttpService;
+import org.acrho.acrho_client.service.IAcrhoProperties;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
 
 public class HttpServiceTest {
 
@@ -18,7 +20,7 @@ public class HttpServiceTest {
     @Test
     public void getTest() throws AcrhoConnectionException, IOException {
         // Given
-        String url = AcrhoProperties.get(AcrhoProperties.URL) + "/Resultats_Bury_220214.pdf";
+        String url = AcrhoProperties.get(IAcrhoProperties.URL) + "/Resultats_Bury_220214.pdf";
         // When
         InputStream is = HttpService.get(url);
         // Then

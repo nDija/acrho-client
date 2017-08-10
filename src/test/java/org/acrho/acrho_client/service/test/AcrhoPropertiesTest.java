@@ -1,5 +1,7 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.acrho_client.service.test;
 
+import org.acrho.acrho_client.service.AcrhoProperties;
+import org.acrho.acrho_client.service.IAcrhoProperties;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,7 +10,7 @@ public class AcrhoPropertiesTest {
     @Test
     public void getTest() {
         // Given
-        String key = AcrhoProperties.URL;
+        String key = IAcrhoProperties.URL;
         // When
         String url = AcrhoProperties.get(key);
         // Then

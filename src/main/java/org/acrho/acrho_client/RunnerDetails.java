@@ -1,4 +1,4 @@
-package com.github.ndija.acrho_client;
+package org.acrho.acrho_client;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.github.ndija.acrho_client.service;
+package org.acrho.acrho_client.service;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,26 +9,24 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 
+import org.acrho.acrho_client.exception.AcrhoConnectionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
-
 public class HttpService {
 
-	private static final Logger log = Logger.getLogger(HttpService.class);
+	private static final Logger LOG = Logger.getLogger(HttpService.class);
 
-	private static String proxy_adress = null;
+	private static String proxyAddress = AcrhoProperties.get(IAcrhoProperties.PROXY_ADRESS);
 
-	private static Integer proxy_port = 80;
+	private static Integer proxyPort = 80;
 
-	private static String USER_AGENT = "Mozilla/5.0";
+	private final static String USER_AGENT = "Mozilla/5.0";
 
 	static {
-		proxy_adress = AcrhoProperties.get(AcrhoProperties.PROXY_ADRESS);
-		String port = AcrhoProperties.get(AcrhoProperties.PROXY_PORT);
+		final String port = AcrhoProperties.get(IAcrhoProperties.PROXY_PORT);
 		if (!StringUtils.isEmpty(port)) {
-			proxy_port = Integer.valueOf(port);
+			proxyPort = Integer.valueOf(port);
 		}
 	}
 
@@ -42,10 +40,10 @@ public class HttpService {
 	 *             if can't connect to the url specified
 	 */
 	public static InputStream get(String url) throws AcrhoConnectionException {
-		log.debug("calling: " + url);
+		LOG.debug("calling: " + url);
 		Proxy proxy = null;
-		if (!StringUtils.isEmpty(proxy_adress)) {
-			proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy_adress, proxy_port));
+		if (!StringUtils.isEmpty(proxyAddress)) {
+			proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyAddress, proxyPort));
 		}
 		try {
 			HttpURLConnection connection = null;
@@ -58,10 +56,10 @@ public class HttpService {
 			connection.setDoInput(true);
 			return connection.getInputStream();
 		} catch (MalformedURLException e) {
-			log.error("Can't read url: " + url, e);
+			LOG.error("Can't read url: " + url, e);
 			throw new AcrhoConnectionException("Can't read url: " + url, e);
 		} catch (IOException e) {
-			log.error("Can't read url: " + url, e);
+			LOG.error("Can't read url: " + url, e);
 			throw new AcrhoConnectionException("Can't read url: " + url, e);
 		}
 	}
@@ -69,14 +67,11 @@ public class HttpService {
 	public static InputStream post(String url, String data) throws AcrhoConnectionException {
 		Proxy proxy = null;
 		try {
-			if (!StringUtils.isEmpty(proxy_adress)) {
-				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy_adress, proxy_port));
+			if (!StringUtils.isEmpty(proxyAddress)) {
+				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyAddress, proxyPort));
 			}
 			HttpURLConnection connection = null;
-			if (proxy != null)
-				connection = (HttpURLConnection) new URL(url).openConnection(proxy);
-			else
-				connection = (HttpURLConnection) new URL(url).openConnection();
+			connection = (proxy != null) ? (HttpURLConnection) new URL(url).openConnection(proxy): (HttpURLConnection) new URL(url).openConnection();
 
 			// add request header
 			connection.setRequestMethod("POST");
@@ -86,22 +81,21 @@ public class HttpService {
 
 			// Send post request
 			connection.setDoOutput(true);
-			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+			final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 			wr.writeBytes(data);
 			wr.flush();
 			wr.close();
 
-			int responseCode = connection.getResponseCode();
-			log.debug("\nSending 'POST' request to URL : " + url);
-			log.debug("Post parameters : " + data);
-			log.debug("Response Code : " + responseCode);
+			LOG.debug("\nSending 'POST' request to URL : " + url);
+			LOG.debug("Post parameters : " + data);
+			LOG.debug("Response Code : " + connection.getResponseCode());
 
 			return connection.getInputStream();
 		} catch (MalformedURLException e) {
-			log.error("Can't read url: " + url, e);
+			LOG.error("Can't read url: " + url, e);
 			throw new AcrhoConnectionException("Can't read url: " + url, e);
 		} catch (IOException e) {
-			log.error("Can't read url: " + url, e);
+			LOG.error("Can't read url: " + url, e);
 			throw new AcrhoConnectionException("Can't read url: " + url, e);
 		}
 
