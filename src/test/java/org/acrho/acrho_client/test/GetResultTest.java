@@ -10,6 +10,7 @@ import org.acrho.acrho_client.exception.AcrhoException;
 import org.acrho.acrho_client.service.AcrhoService;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class GetResultTest {
@@ -34,6 +35,7 @@ public class GetResultTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void getRunResultTest() throws AcrhoConnectionException, ParseException {
 		List<ResultDetails> results = AcrhoService.getResult(441L);
