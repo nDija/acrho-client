@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.github.ndija.acrho_client.exception.AcrhoConnectionException;
@@ -29,6 +30,7 @@ public class GetResultTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void getRunResultTest() throws AcrhoConnectionException, ParseException {
 		AcrhoService.getResult(441L);
