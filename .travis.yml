@@ -8,4 +8,3 @@ before_install:
 - unzip -d /opt/gradle gradle-4.10.2-bin.zip
 - export PATH=$PATH:/opt/gradle/gradle-4.10.2/bin
 - gradle --version
-- gradle assemble
