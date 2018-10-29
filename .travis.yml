@@ -5,8 +5,12 @@ cache:
 directories:
 - $HOME/.gradle/caches/
 - $HOME/.gradle/wrapper/
+dist: trusty
 sudo: false
 install: gradle wrapper --gradle-version 4.10.2 --stacktrace --debug
 language: java
 jdk:
-- oraclejdk11
+- openjdk11
+script:
+# Display Gradle, Groovy, JVM and other versions
+- ./gradlew --version
