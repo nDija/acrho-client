@@ -9,4 +9,4 @@ sudo: false
 install: gradle wrapper --gradle-version 4.10.2 --stacktrace --debug
 language: java
 jdk:
-- oraclejdk8
+- oraclejdk11
