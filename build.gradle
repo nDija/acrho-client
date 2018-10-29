@@ -16,6 +16,8 @@ plugins {
 
 group = 'org.acrho'
 version = '2.0.0-SNAPSHOT'
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
