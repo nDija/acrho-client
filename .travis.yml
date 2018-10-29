@@ -1,19 +1,7 @@
-before_cache:
-- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-cache:
-directories:
-- $HOME/.gradle/caches/
-- $HOME/.gradle/wrapper/
-dist: trusty
 sudo: false
-#install: gradle wrapper --gradle-version 4.10.2 --stacktrace --debug
 language: java
 jdk:
 - openjdk8
-script:
-# Display Gradle, Groovy, JVM and other versions
-- ./gradlew --version
 before_install:
 - wget https://services.gradle.org/distributions/gradle-4.10.2-bin.zip
 - mkdir /opt/gradle
