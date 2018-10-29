@@ -1,0 +1,69 @@
+#baseUrl: http://www.acrho.org
+baseUrl: http://127.0.0.1:1080
+
+results:
+  uri: cust_resultats.php
+  type: post
+  parameters:
+    cle_langue: 1011306039
+    langue: french
+    cle_menus: 1187970092
+    adminop: none
+    ant_filter: ant_search_courses
+    #id of the run
+    ant_filter_value: 516
+    selected_anchor: 0
+    cle_data: 0
+    ant_order: a.place asc
+
+runs:
+  uri: cust_resultats.php
+  type: post
+  parameters:
+    cle_langue: 1011306039
+    langue: french
+    cle_menus: 1187970092
+    cle_data: 0
+    adminop: none
+    ant_order: a.place asc
+    ant_filter: ant_search_annees
+    ant_filter_value: 2018
+    selectedanchor: 0
+
+runner:
+  uri: cust_participants.php
+  type: post
+  parameters:
+    cle_langue: 1011306039
+    langue: french
+    cle_menus: 1187970092
+    #id of the runner
+    cle_data: 1041624601
+    origin: cust_resultats.php
+    adminop: none
+    ant_order: a.place asc
+    ant_filter: ant_filter_part_year
+    ant_filter_value: 2018
+    ant_part_tri: cs.date_event desc
+    ant_part_tri_top10: a.points desc
+    selectedanchor: tab1
+
+years:
+  uri: cust_resultats.php
+  type: get
+  parameters:
+    langue: french
+    cle_menus: 1187970092
+
+#proxy:
+#  host:
+#  port:
+
+getRequest:
+  headers:
+    User-Agent: Mozilla/5.0
+postRequest:
+  headers:
+    User-Agent: Mozilla/5.0
+    Accept-Language: fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4
+    Origin: http://www.acrho.org
