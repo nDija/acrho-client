@@ -6,7 +6,7 @@ directories:
 - $HOME/.gradle/caches/
 - $HOME/.gradle/wrapper/
 sudo: false
-install: gradle wrapper --gradle-version 4.8
+install: gradle wrapper --gradle-version 4.10.2 --stacktrace --debug
 language: java
 jdk:
 - oraclejdk8
