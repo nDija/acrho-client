@@ -15,6 +15,7 @@ script:
 # Display Gradle, Groovy, JVM and other versions
 - ./gradlew --version
 before_install:
+- wget "https://gradle.org/next-steps/?version=4.10.2&format=bin"
 - mkdir /opt/gradle
 - unzip -d /opt/gradle gradle-4.10.2-bin.zip
 - export PATH=$PATH:/opt/gradle/gradle-4.10.2/bin
