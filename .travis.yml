@@ -2,9 +2,3 @@ sudo: false
 language: java
 jdk:
 - openjdk8
-before_install:
-- wget https://services.gradle.org/distributions/gradle-4.10.2-bin.zip
-- mkdir /opt/gradle
-- unzip -d /opt/gradle gradle-4.10.2-bin.zip
-- export PATH=$PATH:/opt/gradle/gradle-4.10.2/bin
-- gradle --version
