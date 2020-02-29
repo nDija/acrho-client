@@ -15,7 +15,6 @@ import java.util.Map;
 @Log4j2
 public class HttpService {
 
-
 	private static Proxy proxy;
 	private final static AcrhoProperties acrhoProperties = PropertyService.getInstance().getAcrhoProperties();
 
@@ -46,8 +45,8 @@ public class HttpService {
 		return connection.getInputStream();
 	}
 
-	public InputStream post(String url, Map<String,String> parameters, Map<String, String> headers) throws IOException {
-		HttpURLConnection connection = buildUrl(url);
+	public InputStream post(String url, Map<String,String> parameters, Map<String, String> headers, HttpURLConnection connection) throws IOException {
+
 		String data = buildQueryParameters(parameters).substring(1);
 		// add request header
 		connection.setRequestMethod("POST");
@@ -56,6 +55,7 @@ public class HttpService {
 		// Send post request
 		connection.setDoOutput(true);
 		final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+		connection.getHeaderFields();
 		wr.writeBytes(data);
 		wr.flush();
 		wr.close();
@@ -67,7 +67,14 @@ public class HttpService {
 		return connection.getInputStream();
 	}
 
-	private static HttpURLConnection buildUrl(String url) throws IOException{
+	public InputStream post(String url, Map<String,String> parameters, Map<String, String> headers) throws IOException {
+		HttpURLConnection connection = buildUrl(url);
+		InputStream responseBody = post(url, parameters, headers, connection);
+		connection.disconnect();
+		return responseBody;
+	}
+
+	public static HttpURLConnection buildUrl(String url) throws IOException{
 		if(proxy == null) {
 			return (HttpURLConnection) new URL(url).openConnection();
 		} else {

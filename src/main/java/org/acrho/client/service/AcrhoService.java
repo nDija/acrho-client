@@ -66,9 +66,13 @@ public class AcrhoService {
 	 * @return List of results for a run
 	 * @author Vincent Hullaert
 	 */
-	public List<AcrhoResult> getResult(String id) {
+	public List<AcrhoResult> getResult(String year, String id) {
+		HttpService connection = HttpService.buildUrl(ap.getRuns().getUri());
+		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRuns());
+		parameters.put(ANT_FILTER_VALUE, year);
+		post(ap.getRuns(), parameters);
 
-		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getResults());
+		parameters = AcrhoUtil.getParameters(ap.getResults());
 		parameters.put(ANT_FILTER_VALUE, id);
 		String response = post(ap.getResults(), parameters);
 		Document doc = Jsoup.parse(response);

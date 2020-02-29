@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Log4j2
-@Disabled
 class HttpServiceTest {
 
     private static AcrhoProperties ap = PropertyService.getInstance().getAcrhoProperties();
@@ -56,7 +55,21 @@ class HttpServiceTest {
     @ExtendWith(TimingExtension.class)
     void getRuns() {
         ap.getRuns().getParameters().put("ant_filter_value", "2016");
-        try(InputStream is = httpService.post(ap.getBaseUrl() + "/"+ ap.getRuns().getUri(), ap.getRuns().getParameters(), ap.getPostRequest().getHeaders())) {
+        try(InputStream is = httpService.post("http://www.acrho.org" + "/"+ ap.getRuns().getUri(), ap.getRuns().getParameters(), ap.getPostRequest().getHeaders())) {
+            log.debug(IOUtils.toString(is, UTF_8.name()));
+        } catch (IOException e) {
+            log.error(e);
+            fail();
+        }
+        assertTrue(true);
+    }
+
+    @Test
+    @DisplayName("When I request runs from 2016 I get a 200 status code and the HTML page of 2016's runs")
+    @ExtendWith(TimingExtension.class)
+    void getResults() {
+        ap.getRuns().getParameters().put("ant_filter_value", "2408");
+        try(InputStream is = httpService.post("http://www.acrho.org" + "/"+ ap.getRuns().getUri(), ap.getRuns().getParameters(), ap.getPostRequest().getHeaders())) {
             log.debug(IOUtils.toString(is, UTF_8.name()));
         } catch (IOException e) {
             log.error(e);

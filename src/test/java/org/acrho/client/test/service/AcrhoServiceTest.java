@@ -123,4 +123,11 @@ public class AcrhoServiceTest {
         log.debug(type);
         assertEquals("C", type);
     }
+
+    @Test
+    @DisplayName("")
+    @ExtendWith(TimingExtension.class)
+    public void getResult() {
+        as.getResult("2408");
+    }
 }
