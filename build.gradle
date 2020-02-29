@@ -53,6 +53,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:2.23.0'
     testImplementation 'org.mock-server:mockserver-netty:5.9.0'
     testImplementation 'org.mock-server:mockserver-client-java:5.9.0'
+    testImplementation 'org.mock-server:mockserver-junit-rule:5.9.0'
 }
 
 // In this section you declare where to find the dependencies of your project
