@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,8 +67,8 @@ public class AcrhoService {
 	 * @return List of results for a run
 	 * @author Vincent Hullaert
 	 */
-	public List<AcrhoResult> getResult(String year, String id) {
-		HttpService connection = HttpService.buildUrl(ap.getRuns().getUri());
+	public List<AcrhoResult> getResult(String year, String id) throws IOException {
+		HttpURLConnection connection = HttpService.createConnection(ap.getRuns().getUri());
 		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRuns());
 		parameters.put(ANT_FILTER_VALUE, year);
 		post(ap.getRuns(), parameters);

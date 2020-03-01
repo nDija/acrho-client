@@ -39,7 +39,7 @@ public class HttpService {
 		if(queryParameters != null)
 			url += queryParameters;
 		log.debug("calling: " + url);
-		HttpURLConnection connection = buildUrl(url);
+		HttpURLConnection connection = createConnection(url);
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
 		return connection.getInputStream();
@@ -68,18 +68,22 @@ public class HttpService {
 	}
 
 	public InputStream post(String url, Map<String,String> parameters, Map<String, String> headers) throws IOException {
-		HttpURLConnection connection = buildUrl(url);
+		HttpURLConnection connection = createConnection(url);
 		InputStream responseBody = post(url, parameters, headers, connection);
-		connection.disconnect();
+		closeConnection(connection);
 		return responseBody;
 	}
 
-	public static HttpURLConnection buildUrl(String url) throws IOException{
+	public static HttpURLConnection createConnection(String url) throws IOException {
 		if(proxy == null) {
 			return (HttpURLConnection) new URL(url).openConnection();
 		} else {
 			return (HttpURLConnection) new URL(url).openConnection(proxy);
 		}
+	}
+
+	public static void closeConnection(HttpURLConnection connection) {
+		connection.disconnect();
 	}
 
 	public static String buildQueryParameters(Map<String, String> parameters) {
