@@ -50,10 +50,7 @@ dependencies {
     testImplementation 'org.projectlombok:lombok:1.18.2'
     testImplementation 'org.apache.logging.log4j:log4j-api:2.13.0'
     testImplementation 'org.apache.logging.log4j:log4j-core:2.13.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:2.23.0'
-    testImplementation 'org.mock-server:mockserver-netty:5.9.0'
-    testImplementation 'org.mock-server:mockserver-client-java:5.9.0'
-    testImplementation 'org.mock-server:mockserver-junit-rule:5.9.0'
+    testImplementation 'org.mock-server:mockserver-junit-jupiter:5.9.0'
 }
 
 // In this section you declare where to find the dependencies of your project

@@ -2,6 +2,7 @@ package org.acrho.client.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.acrho.client.model.property.AcrhoProperties;
+import org.apache.commons.io.IOUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.util.Map;
+
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 @Log4j2
 public class HttpService {
@@ -32,7 +35,7 @@ public class HttpService {
 	 * @throws IOException when error occurs {@link IOException}
 	 * @return An {@link InputStream}
 	 */
-	public InputStream get(String url, Map<String, String> parameters) throws IOException {
+	public String get(String url, Map<String, String> parameters) throws IOException {
 		String queryParameters = null;
 		if(parameters != null)
 			queryParameters = buildQueryParameters(parameters);
@@ -42,10 +45,12 @@ public class HttpService {
 		HttpURLConnection connection = createConnection(url);
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
-		return connection.getInputStream();
+		String response = IOUtils.toString(connection.getInputStream(), ISO_8859_1.name());
+		closeConnection(connection);
+		return response;
 	}
 
-	public InputStream post(String url, Map<String,String> parameters, Map<String, String> headers, HttpURLConnection connection) throws IOException {
+	public InputStream post(Map<String,String> parameters, Map<String, String> headers, HttpURLConnection connection) throws IOException {
 
 		String data = buildQueryParameters(parameters).substring(1);
 		// add request header
@@ -60,17 +65,24 @@ public class HttpService {
 		wr.flush();
 		wr.close();
 
-		log.debug("\nSending 'POST' request to URL : " + url);
+		//log.debug("\nSending 'POST' request to URL : " + url);
 		log.debug("Post parameters : " + data);
 		log.debug("Response Code : " + connection.getResponseCode());
 
 		return connection.getInputStream();
 	}
 
-	public InputStream post(String url, Map<String,String> parameters, Map<String, String> headers) throws IOException {
+	public String post(String url, Map<String,String> parameters, Map<String, String> headers) throws IOException {
 		HttpURLConnection connection = createConnection(url);
-		InputStream responseBody = post(url, parameters, headers, connection);
+		InputStream is = post(parameters, headers, connection);
+		String responseBody = IOUtils.toString(is, ISO_8859_1.name());
 		closeConnection(connection);
+		return responseBody;
+	}
+
+	public String post(HttpURLConnection connection, Map<String,String> parameters, Map<String, String> headers) throws IOException {
+		InputStream is = post(parameters, headers, connection);
+		String responseBody = IOUtils.toString(is, ISO_8859_1.name());
 		return responseBody;
 	}
 
