@@ -52,15 +52,13 @@ public class HttpService {
 
 	public InputStream post(Map<String,String> parameters, Map<String, String> headers, HttpURLConnection connection) throws IOException {
 
-		String data = buildQueryParameters(parameters).substring(1);
+		String data = buildPostBodyString(parameters);
 		// add request header
 		connection.setRequestMethod("POST");
 		headers.forEach(connection::setRequestProperty);
-
 		// Send post request
 		connection.setDoOutput(true);
 		final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-		connection.getHeaderFields();
 		wr.writeBytes(data);
 		wr.flush();
 		wr.close();
