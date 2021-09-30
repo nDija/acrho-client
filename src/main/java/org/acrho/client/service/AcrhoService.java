@@ -1,27 +1,28 @@
 package org.acrho.client.service;
 
-import lombok.extern.log4j.Log4j2;
-import org.acrho.client.util.AcrhoUtil;
 import org.acrho.client.model.AcrhoResult;
 import org.acrho.client.model.AcrhoRun;
 import org.acrho.client.model.AcrhoRunner;
 import org.acrho.client.model.property.AcrhoProperties;
 import org.acrho.client.model.property.QueryProperties;
+import org.acrho.client.util.AcrhoUtil;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static javax.swing.text.html.HTML.Attribute.CLASS;
-import static javax.swing.text.html.HTML.Attribute.NAME;
-import static javax.swing.text.html.HTML.Attribute.VALUE;
+import static javax.swing.text.html.HTML.Attribute.*;
 import static javax.swing.text.html.HTML.Tag.*;
 import static org.acrho.client.AcrhoConstant.*;
 
@@ -31,11 +32,11 @@ import static org.acrho.client.AcrhoConstant.*;
  * @author Vincent Hullaert
  *
  */
-@Log4j2
 public class AcrhoService {
 
-	private AcrhoProperties ap = PropertyService.getInstance().getAcrhoProperties();
-	private static HttpService httpService = new HttpService();
+	Logger log = LoggerFactory.getLogger(AcrhoService.class);
+
+	private final AcrhoProperties ap = PropertyService.getInstance().getAcrhoProperties();
 
 	/**
 	 * Get a list of runs by year
@@ -44,14 +45,15 @@ public class AcrhoService {
 	 * @return List of runs of the current year
 	 * @author Vincent Hullaert
 	 */
-	public List<AcrhoRun> getRuns(String year) {
-		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRuns());
+	public List<AcrhoRun> getRuns(String year) throws IOException, URISyntaxException, InterruptedException {
+		var parameters = AcrhoUtil.getParameters(ap.getRuns());
 		parameters.put(ANT_FILTER_VALUE, year);
-		String response = post(ap.getRuns(), parameters);
-		Elements options = Jsoup.parse(response)
+		var response = post(ap.getRuns(), parameters);
+		var options = Jsoup.parse(response)
 				.getElementsByAttributeValue(NAME.toString(), ANT_SEARCH_COURSES).get(0)
 				.getElementsByTag(OPTION.toString());
-		log.debug("Found courses: " + (options.size() - 1));
+		if(log.isDebugEnabled())
+			log.debug(MessageFormat.format("Found courses: {0}", (options.size() - 1)));
 		return options.stream()
 				.filter(option -> !option.attr(VALUE.toString()).equals(STRING_0))
 				.map(AcrhoUtil::getRun)
@@ -66,16 +68,17 @@ public class AcrhoService {
 	 * @return List of results for a run
 	 * @author Vincent Hullaert
 	 */
-	public List<AcrhoResult> getResult(String id) {
+	public List<AcrhoResult> getResult(String id) throws IOException, URISyntaxException, InterruptedException {
 
-		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getResults());
+		var parameters = AcrhoUtil.getParameters(ap.getResults());
 		parameters.put(ANT_FILTER_VALUE, id);
-		String response = post(ap.getResults(), parameters);
-		Document doc = Jsoup.parse(response);
-		Elements trResults = doc.getElementsByAttributeValue(CLASS.toString(), SPERESULTS).get(0)
+		var response = post(ap.getResults(), parameters);
+		var doc = Jsoup.parse(response);
+		var trResults = doc.getElementsByAttributeValue(CLASS.toString(), SPERESULTS).get(0)
 				.getElementsByTag(TBODY).get(0).getElementsByTag(TR.toString());
 		trResults.remove(0);
-		log.debug("Results count: " + trResults.size());
+		if(log.isDebugEnabled())
+			log.debug(MessageFormat.format("Results count: {0}", trResults.size()));
 		return trResults.stream()
 				.map(tr -> tr.getElementsByTag(TD.toString()))
 				.map(AcrhoUtil::getResult).collect(Collectors.toList());
@@ -89,15 +92,15 @@ public class AcrhoService {
 	 * @return The details of the runner
 	 * @author Vincent Hullaert
 	 */
-	public AcrhoRunner getRunner(String id) {
-		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRunner());
+	public AcrhoRunner getRunner(String id) throws IOException, URISyntaxException, InterruptedException {
+		var parameters = AcrhoUtil.getParameters(ap.getRunner());
 		parameters.put(CLE_DATA, id);
-		String response = post(ap.getRunner(), parameters);
-		Document doc = Jsoup.parse(response);
+		var response = post(ap.getRunner(), parameters);
+		var doc = Jsoup.parse(response);
 		return AcrhoUtil.getRunner(doc);
 	}
 
-	public String getRunType(String runId, String runnerId) {
+	public String getRunType(String runId, String runnerId) throws IOException, URISyntaxException, InterruptedException {
 		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRunner());
 		parameters.put(CLE_DATA, runnerId);
 		String response = post(ap.getRunner(), parameters);
@@ -107,34 +110,10 @@ public class AcrhoService {
 	/**
 	 *
 	 * @param qp The query from yaml file
-	 * @param parameters The request parameters cloned
 	 * @return The response as {@link String}
 	 */
-	private String post(QueryProperties qp, Map<String, String> parameters) {
-		String response = null;
-		try (InputStream is = httpService.post(ap.getBaseUrl() + "/" + qp.getUri(), parameters, ap.getPostRequest().getHeaders())) {
-			response = IOUtils.toString(is, ISO_8859_1.name());
-		} catch (IOException e) {
-			log.error(e);
-		}
-		log.debug(response);
-		return response;
-	}
+	private String post(QueryProperties qp, Map<String, String> body) throws IOException, URISyntaxException, InterruptedException {
 
-	/**
-	 *
-	 * @param qp The query from yaml file
-	 * @param parameters The request parameters cloned
-	 * @return The response as {@link String}
-	 */
-	private String get(QueryProperties qp, Map<String, String> parameters) {
-		String response = null;
-		try (InputStream is = httpService.get(ap.getBaseUrl() + "/" + qp.getUri(), parameters)) {
-			response = IOUtils.toString(is, ISO_8859_1.name());
-		} catch (IOException e) {
-			log.error(e);
-		}
-		log.debug(response);
-		return response;
+		return HttpClient.post(ap.getBaseUrl() + "/" + qp.getUri(), ap.getPostRequest().getHeaders(),null, body, ISO_8859_1);
 	}
 }

@@ -6,10 +6,9 @@ import org.acrho.client.model.AcrhoRunner;
 import org.acrho.client.model.property.QueryProperties;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-import java.math.BigDecimal;
 import org.jsoup.select.Elements;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -17,18 +16,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static javax.swing.text.html.HTML.Attribute.CLASS;
-import static javax.swing.text.html.HTML.Attribute.HREF;
-import static javax.swing.text.html.HTML.Attribute.VALUE;
+import static javax.swing.text.html.HTML.Attribute.*;
 import static javax.swing.text.html.HTML.Tag.A;
 import static javax.swing.text.html.HTML.Tag.H1;
 import static org.acrho.client.AcrhoConstant.*;
 
 public class AcrhoUtil {
 
-    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(PATTERN_DATE);
-    private static Pattern patternSelectRun = Pattern.compile(PATTERN_SELECT_RUN);
-    private static Pattern patternSelectIdRunner = Pattern.compile(PATTERN_SELECT_ID_RUNNER);
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(PATTERN_DATE);
+    private static final Pattern patternSelectRun = Pattern.compile(PATTERN_SELECT_RUN);
+    private static final Pattern patternSelectIdRunner = Pattern.compile(PATTERN_SELECT_ID_RUNNER);
 
     private AcrhoUtil(){}
 
@@ -53,16 +50,16 @@ public class AcrhoUtil {
     }
 
     public static AcrhoResult getResult(Elements tds) {
-        Integer position = Integer.parseInt(tds.get(0).text());
-        String name = tds.get(1).text().replaceAll(NBSP, EMPTY_STRING);
-        String urlProfil = tds.get(1).getElementsByTag(A.toString()).get(0).attr(HREF.toString());
-        String team = tds.get(2).text();
-        Long time = getMillis(tds.get(3).text());
-        Long avg = getMillis(tds.get(4).text());
-        BigDecimal speed = new BigDecimal(tds.get(5).text().replaceAll(COMA, POINT));
-        Integer points = Integer.valueOf(tds.get(6).text());
-        String category = tds.get(7).text();
-        Matcher m = patternSelectIdRunner.matcher(urlProfil);
+        var position = Integer.parseInt(tds.get(0).text());
+        var name = tds.get(1).text().replaceAll(NBSP, EMPTY_STRING);
+        var urlProfil = tds.get(1).getElementsByTag(A.toString()).get(0).attr(HREF.toString());
+        var team = tds.get(2).text();
+        var time = getMillis(tds.get(3).text());
+        var avg = getMillis(tds.get(4).text());
+        var speed = new BigDecimal(tds.get(5).text().replaceAll(COMA, POINT));
+        var points = Integer.valueOf(tds.get(6).text());
+        var category = tds.get(7).text();
+        var m = patternSelectIdRunner.matcher(urlProfil);
         Long idRunner = null;
         if (m.matches()) {
             idRunner = Long.valueOf(m.group(1));
@@ -94,12 +91,12 @@ public class AcrhoUtil {
 
         long timeInMillis = 0L;
         if (h.length != 1) {
-            timeInMillis = Long.valueOf(h[0]) * 60 * 60 * 1000;
+            timeInMillis = Long.parseLong(h[0]) * 60 * 60 * 1000;
             m = h[1].split(M);
         }
 
-        timeInMillis += Long.valueOf(m[0]) * 60 * 1000;
-        timeInMillis += Long.valueOf(m[1].replaceAll(S, EMPTY_STRING)) * 1000;
+        timeInMillis += Long.parseLong(m[0]) * 60 * 1000;
+        timeInMillis += Long.parseLong(m[1].replaceAll(S, EMPTY_STRING)) * 1000;
         return timeInMillis;
     }
 

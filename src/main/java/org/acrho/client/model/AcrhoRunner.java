@@ -3,17 +3,17 @@ package org.acrho.client.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 /**
  * An Acrho runner description
  */
-@Log4j2
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class AcrhoRunner {
     private String name;
     private LocalDate birthDate;

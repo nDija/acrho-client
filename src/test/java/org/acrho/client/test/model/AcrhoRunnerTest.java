@@ -1,20 +1,22 @@
 package org.acrho.client.test.model;
 
-import lombok.extern.log4j.Log4j2;
 import org.acrho.client.model.AcrhoRunner;
 import org.acrho.client.test.TimingExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Log4j2
 class AcrhoRunnerTest {
 
-    private static AcrhoRunner rd1 =
+    Logger log = LoggerFactory.getLogger(AcrhoRunnerTest.class);
+
+    private static final AcrhoRunner rd1 =
             new AcrhoRunner("Vincent Hullaert", LocalDate.of(1977, 5, 17),"V1","Cocoach",1);
 
     @Test

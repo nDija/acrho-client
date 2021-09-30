@@ -12,13 +12,16 @@ import org.acrho.client.test.TimingExtension;
 import org.acrho.client.util.AcrhoUtil;
 import org.apache.commons.io.IOUtils;
 
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.client.MockServerClient;
-import org.mockserver.junit.MockServerRule;
+import org.mockserver.integration.ClientAndServer;
+import org.mockserver.junit.jupiter.MockServerExtension;
+import org.mockserver.junit.jupiter.MockServerSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.io.IOException;
@@ -34,20 +37,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-@Log4j2
-public class AcrhoServiceTest {
+@MockServerSettings(ports = {1080})
+@ExtendWith(MockServerExtension.class)
+class AcrhoServiceTest {
+
+    private final Logger log = LoggerFactory.getLogger(AcrhoServiceTest.class);
 
     private AcrhoService as = new AcrhoService();
 
-    @Rule
-    public MockServerRule mockServerRule = new MockServerRule(this, 1080);
-
-    private MockServerClient mockServerClient = null;
+    private final ClientAndServer client;
 
     private AcrhoProperties acrhoProperties = PropertyService.getInstance().getAcrhoProperties();
 
-    @Before
-    public void initMockServer() throws IOException{
+    public AcrhoServiceTest(ClientAndServer client) {
+        this.client = client;
+    }
+
+    @BeforeEach
+    public void initMockServer(ClientAndServer client) throws IOException{
         InputStream responseRuns = AcrhoServiceTest.class.getClassLoader()
                 .getResourceAsStream("acrho/acrho_runs_2017.html");
         InputStream responseResults = AcrhoServiceTest.class.getClassLoader()
@@ -62,7 +69,7 @@ public class AcrhoServiceTest {
         runnerParameters.put(CLE_DATA, "1041624601");
 
         //Mock for runs HTTP request
-        mockServerClient
+        client
                 .when(request()
                         .withMethod("POST")
                         .withPath("/" + acrhoProperties.getRuns().getUri())
@@ -70,7 +77,7 @@ public class AcrhoServiceTest {
                 .respond(response()
                         .withBody(IOUtils.toString(responseRuns, ISO_8859_1.name())));
 
-        mockServerClient
+        client
                 .when(request()
                         .withMethod("POST")
                         .withPath("/" + acrhoProperties.getResults().getUri())
@@ -78,7 +85,7 @@ public class AcrhoServiceTest {
                 .respond(response()
                         .withBody(IOUtils.toString(responseResults, ISO_8859_1.name())));
 
-        mockServerClient
+        client
                 .when(request()
                         .withMethod("POST")
                         .withPath("/" + acrhoProperties.getRunner().getUri())
@@ -93,7 +100,7 @@ public class AcrhoServiceTest {
     @ExtendWith(TimingExtension.class)
     public void getRuns() {
         List<AcrhoRun> runs = as.getRuns("2017");
-        runs.forEach(log::debug);
+        runs.forEach(r -> log.debug(r.toString()));
         assertEquals(40, runs.size());
     }
 
@@ -103,7 +110,7 @@ public class AcrhoServiceTest {
     public void getResults() {
         as.getRuns("2017");
         List<AcrhoResult> results = as.getResult("508");
-        results.forEach(log::debug);
+        results.forEach(r -> log.debug(r.toString()));
         assertEquals(831, results.size());
     }
 
@@ -112,7 +119,7 @@ public class AcrhoServiceTest {
     @ExtendWith(TimingExtension.class)
     public void getRunner() {
         AcrhoRunner runner = as.getRunner("1041624601");
-        log.debug(runner);
+        log.debug(runner.toString());
         assertEquals("Coraline Capelle", runner.getName());
     }
 
