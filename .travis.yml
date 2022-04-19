@@ -1,7 +1,7 @@
 sudo: false
 language: java
 before_install:
-  - wget http://services.gradle.org/distributions/gradle-7.4.2-all.zip
+  - curl http://services.gradle.org/distributions/gradle-7.4.2-all.zip
   - unzip -qq gradle-7.4.2-all.zip
   - export GRADLE_HOME=$PWD/gradle-7.4.2
   - export PATH=$GRADLE_HOME/bin:$PATH
@@ -9,6 +9,6 @@ before_install:
   - curl -s "https://get.sdkman.io" | bash
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
   - sdk install java 17.0.2-oracle
-  - sdk use java 17.0.2-oracle
+  - sdk use java 17.0.2-open
 
 
