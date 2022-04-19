@@ -1,8 +1,10 @@
 sudo: false
 language: java
 before_install:
-  - sudo apt update
-  - sudo apt -y upgrade
-  - sudo apt install openjdk-17-jre-headless
+
+  - curl -s "https://get.sdkman.io" | bash
+  - source "$HOME/.sdkman/bin/sdkman-init.sh"
+  - sdk install java 17.0.2-oracle
+  - sdk use java 17.0.2-oracle
 
 
