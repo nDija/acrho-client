@@ -1,7 +1,8 @@
 package org.acrho.client.test.service;
 
+import org.acrho.client.AcrhoClientException;
 import org.acrho.client.model.property.AcrhoProperties;
-import org.acrho.client.service.HttpClient;
+import org.acrho.client.service.AcrhoHttpClient;
 import org.acrho.client.service.HttpService;
 import org.acrho.client.service.PropertyService;
 import org.acrho.client.test.TimingExtension;
@@ -30,21 +31,15 @@ class HttpServiceTest {
     @Test
     @DisplayName("When I request an url I get a 200 status code")
     @ExtendWith(TimingExtension.class)
-    void getTest() {
-        try{
-            String is = HttpClient.get("http://www.acrho.org", null, null, StandardCharsets.ISO_8859_1);
-            log.debug(is);
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            log.error(e.getMessage());
-            fail();
-        }
-        assertTrue(true);
+    void testGetTest() throws AcrhoClientException {
+        String is = AcrhoHttpClient.get("http://www.acrho.org", null, null, StandardCharsets.ISO_8859_1);
+        log.debug(is);
     }
 
     @Test
     @DisplayName("When I request years I get a 200 status code")
     @ExtendWith(TimingExtension.class)
-    void getYears() {
+    void testGetYears() {
         try(InputStream is = httpService.get(ap.getBaseUrl() + "/"+ ap.getYears().getUri(), ap.getYears().getParameters())) {
             log.debug(IOUtils.toString(is, UTF_8.name()));
         } catch (IOException e) {

@@ -27,6 +27,16 @@ public class AcrhoUtil {
     private static final Pattern patternSelectRun = Pattern.compile(PATTERN_SELECT_RUN);
     private static final Pattern patternSelectIdRunner = Pattern.compile(PATTERN_SELECT_ID_RUNNER);
 
+    private static final int ELEMENT_1 = 1;
+    private static final int ELEMENT_2 = 2;
+    private static final int ELEMENT_3 = 3;
+    private static final int ELEMENT_4 = 4;
+    private static final int ELEMENT_5 = 5;
+    private static final int ELEMENT_6 = 6;
+    private static final int ELEMENT_7 = 7;
+
+    private static final int LENGTH_1 = 1;
+
     private AcrhoUtil(){}
 
     public static AcrhoRun getRun(Element option) {
@@ -42,27 +52,27 @@ public class AcrhoUtil {
         String label = option.childNode(0).outerHtml().trim();
         Matcher m = patternSelectRun.matcher(label);
         if (m.matches()) {
-            name = m.group(1).trim();
-            localDate = LocalDate.parse(m.group(2), dateTimeFormatter);
-            distance = new BigDecimal(m.group(3));
+            name = m.group(ELEMENT_1).trim();
+            localDate = LocalDate.parse(m.group(ELEMENT_2), dateTimeFormatter);
+            distance = new BigDecimal(m.group(ELEMENT_3));
         }
         return new AcrhoRun(id, name, null, localDate, distance);
     }
 
     public static AcrhoResult getResult(Elements tds) {
         var position = Integer.parseInt(tds.get(0).text());
-        var name = tds.get(1).text().replaceAll(NBSP, EMPTY_STRING);
-        var urlProfil = tds.get(1).getElementsByTag(A.toString()).get(0).attr(HREF.toString());
-        var team = tds.get(2).text();
-        var time = getMillis(tds.get(3).text());
-        var avg = getMillis(tds.get(4).text());
-        var speed = new BigDecimal(tds.get(5).text().replaceAll(COMA, POINT));
+        var name = tds.get(ELEMENT_1).text().replaceAll(NBSP, EMPTY_STRING);
+        var urlProfil = tds.get(ELEMENT_1).getElementsByTag(A.toString()).get(0).attr(HREF.toString());
+        var team = tds.get(ELEMENT_2).text();
+        var time = getMillis(tds.get(ELEMENT_3).text());
+        var avg = getMillis(tds.get(ELEMENT_4).text());
+        var speed = new BigDecimal(tds.get(ELEMENT_5).text().replaceAll(COMA, POINT));
         var points = Integer.valueOf(tds.get(6).text());
-        var category = tds.get(7).text();
+        var category = tds.get(ELEMENT_7).text();
         var m = patternSelectIdRunner.matcher(urlProfil);
         Long idRunner = null;
         if (m.matches()) {
-            idRunner = Long.valueOf(m.group(1));
+            idRunner = Long.valueOf(m.group(ELEMENT_1));
         }
         return new AcrhoResult(position, name, urlProfil, team, time, avg, speed, points, category, idRunner);
     }
@@ -74,15 +84,15 @@ public class AcrhoUtil {
                 .getElementsByAttributeValue(CLASS.toString(), SPEVALUE);
         AcrhoRunner runner = new AcrhoRunner();
         runner.setName(name);
-        runner.setBib(Integer.parseInt(details.get(3).text()));
+        runner.setBib(Integer.parseInt(details.get(ELEMENT_3).text()));
         runner.setBirthDate(LocalDate.parse(details.get(0).text(), dateTimeFormatter));
-        runner.setCategory(details.get(1).text());
-        runner.setTeam(details.get(2).text());
+        runner.setCategory(details.get(ELEMENT_1).text());
+        runner.setTeam(details.get(ELEMENT_2).text());
         return runner;
     }
 
     public static String getType(Document doc, String runId) {
-        return doc.getElementsByAttributeValue("data-reveal-id", "myModal" + runId).parents().get(1).childNodes().get(5).childNode(0).outerHtml();
+        return doc.getElementsByAttributeValue("data-reveal-id", "myModal" + runId).parents().get(ELEMENT_1).childNodes().get(ELEMENT_5).childNode(0).outerHtml();
     }
 
     private static Long getMillis(String time) {
@@ -90,13 +100,13 @@ public class AcrhoUtil {
         String[] m = time.split(M);
 
         long timeInMillis = 0L;
-        if (h.length != 1) {
+        if (h.length != LENGTH_1) {
             timeInMillis = Long.parseLong(h[0]) * 60 * 60 * 1000;
-            m = h[1].split(M);
+            m = h[ELEMENT_1].split(M);
         }
 
         timeInMillis += Long.parseLong(m[0]) * 60 * 1000;
-        timeInMillis += Long.parseLong(m[1].replaceAll(S, EMPTY_STRING)) * 1000;
+        timeInMillis += Long.parseLong(m[ELEMENT_1].replaceAll(S, EMPTY_STRING)) * 1000;
         return timeInMillis;
     }
 

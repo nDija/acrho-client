@@ -13,11 +13,11 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class AcrhoRunner {
     private String name;
     private LocalDate birthDate;
     private String category;
     private String team;
     private Integer bib;
+    private Long id;
 }

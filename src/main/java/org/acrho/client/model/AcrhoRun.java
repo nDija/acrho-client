@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class AcrhoRun {
     private Long id;
     private String name;

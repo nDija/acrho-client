@@ -17,7 +17,7 @@ class AcrhoRunnerTest {
     Logger log = LoggerFactory.getLogger(AcrhoRunnerTest.class);
 
     private static final AcrhoRunner rd1 =
-            new AcrhoRunner("Vincent Hullaert", LocalDate.of(1977, 5, 17),"V1","Cocoach",1);
+            new AcrhoRunner("Vincent Hullaert", LocalDate.of(1977, 5, 17),"V1","Cocoach",1, 460L);
 
     @Test
     @DisplayName("When I set value to a new runner I guess I'm having same value in getters")
