@@ -1,6 +1,6 @@
 package org.acrho.client.test.service;
 
-import lombok.extern.log4j.Log4j2;
+import org.acrho.client.AcrhoClientException;
 import org.acrho.client.model.AcrhoResult;
 import org.acrho.client.model.AcrhoRun;
 import org.acrho.client.model.AcrhoRunner;
@@ -11,14 +11,15 @@ import org.acrho.client.service.PropertyService;
 import org.acrho.client.test.TimingExtension;
 import org.acrho.client.util.AcrhoUtil;
 import org.apache.commons.io.IOUtils;
-
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
 import org.mockserver.junit.jupiter.MockServerSettings;
-import org.mockserver.model.Headers;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,20 +33,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-@Log4j2
-@ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = {1080})
-public class AcrhoServiceTest {
+@ExtendWith(MockServerExtension.class)
+class AcrhoServiceTest {
 
-    private AcrhoService as = new AcrhoService();
+    private static final Logger LOG = LoggerFactory.getLogger(AcrhoServiceTest.class);
 
-    private ClientAndServer client;
+    private final AcrhoService as = new AcrhoService();
 
-    private AcrhoProperties acrhoProperties = PropertyService.getInstance().getAcrhoProperties();
+    private final ClientAndServer client;
 
-    public AcrhoServiceTest(ClientAndServer client) throws IOException{
+    private static final AcrhoProperties acrhoProperties = PropertyService.getInstance().getAcrhoProperties();
+
+    public AcrhoServiceTest(ClientAndServer client) {
         this.client = client;
-        client.getLocalPort();
+    }
+
+    @BeforeAll
+    public static void initMockServer(ClientAndServer client) throws IOException{
         InputStream responseRuns = AcrhoServiceTest.class.getClassLoader()
                 .getResourceAsStream("acrho/acrho_runs_2017.html");
         InputStream responseResults = AcrhoServiceTest.class.getClassLoader()
@@ -59,94 +64,79 @@ public class AcrhoServiceTest {
         Map<String, String> runnerParameters = AcrhoUtil.getParameters(acrhoProperties.getRunner());
         runnerParameters.put(CLE_DATA, "1041624601");
 
-
-        Headers headers = new Headers();
-        headers.withEntry("User-Agent", "Mozilla/5.0");
-        headers.withEntry("Accept-Language", "fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4");
-        headers.withEntry("Origin", "http://www.acrho.org");
         //Mock for runs HTTP request
-        client.when(request().withMethod("GET").withPath("/" + acrhoProperties.getRuns().getUri())
-                )
-                .respond(response()
-                        .withBody("ok"));
+        assert responseRuns != null;
         client
                 .when(request()
                         .withMethod("POST")
-                        .withHeaders(headers)
                         .withPath("/" + acrhoProperties.getRuns().getUri())
-                        .withBody(HttpService.buildPostBodyString(runsParameters))
-                        )
+                        .withBody(HttpService.buildPostBodyString(runsParameters)))
                 .respond(response()
                         .withBody(IOUtils.toString(responseRuns, ISO_8859_1.name())));
 
+        assert responseResults != null;
         client
                 .when(request()
                         .withMethod("POST")
-                        .withHeaders(headers)
                         .withPath("/" + acrhoProperties.getResults().getUri())
                         .withBody(HttpService.buildPostBodyString(resultsParameters)))
-
                 .respond(response()
                         .withBody(IOUtils.toString(responseResults, ISO_8859_1.name())));
 
+        assert responseRunner != null;
         client
                 .when(request()
                         .withMethod("POST")
-                        .withHeaders(headers)
                         .withPath("/" + acrhoProperties.getRunner().getUri())
                         .withBody(HttpService.buildPostBodyString(runnerParameters)))
-                //.withQueryStringParameters(TestUtil.toMockServerParameters(runnerParameters)))
+                        //.withQueryStringParameters(TestUtil.toMockServerParameters(runnerParameters)))
                 .respond(response()
                         .withBody(IOUtils.toString(responseRunner, ISO_8859_1.name())));
     }
 
     @Test
-    public void getOk() throws IOException{
-        String response = new HttpService().get("http://127.0.0.1:1080/" + acrhoProperties.getRuns().getUri(), null);
-        assertEquals("ok", response);
-    }
-
-    @Test
-    //@DisplayName("When I request an url I get a 200 status code")
+    @DisplayName("When I request an url I get a 200 status code")
     @ExtendWith(TimingExtension.class)
-    public void getRuns() throws IOException{
+    void testGetSessionId() throws AcrhoClientException {
         List<AcrhoRun> runs = as.getRuns("2017");
-        runs.forEach(log::debug);
-        assertEquals(40, runs.size());
+        runs.forEach(r -> LOG.debug(r.toString()));
+        assertEquals(40, runs.size(), "Test if number of runs is equals as expected");
     }
 
     @Test
-    //@DisplayName("When I request an url I get a 200 status codex")
+    @DisplayName("When I request an url I get a 200 status code")
     @ExtendWith(TimingExtension.class)
-    public void getResults()  throws IOException{
+    void testGetRuns() throws AcrhoClientException {
+        List<AcrhoRun> runs = as.getRuns("2017");
+        runs.forEach(r -> LOG.debug(r.toString()));
+        assertEquals(40, runs.size(), "Test if number of runs is equals as expected");
+    }
+
+    @Test
+    @DisplayName("When I request an url I get a 200 status code")
+    @ExtendWith(TimingExtension.class)
+    void testGetResults() throws AcrhoClientException {
         as.getRuns("2017");
-        List<AcrhoResult> results = as.getResult("2017", "508");
-        results.forEach(log::debug);
-        assertEquals(831, results.size());
+        List<AcrhoResult> results = as.getResult("508");
+        results.forEach(r -> LOG.debug(r.toString()));
+        assertEquals(831, results.size(), "");
     }
 
     @Test
-    //@DisplayName("When I request an url I get a 200 status code")
+    @DisplayName("When I request an url I get a 200 status code")
     @ExtendWith(TimingExtension.class)
-    public void getRunner()  throws IOException{
+    void testGetRunner() throws AcrhoClientException {
         AcrhoRunner runner = as.getRunner("1041624601");
-        log.debug(runner);
-        assertEquals("Coraline Capelle", runner.getName());
+        LOG.debug(runner.toString());
+        assertEquals("Coraline Capelle", runner.getName(), "");
     }
 
     @Test
-    //@DisplayName("When I request an url I get a 200 status code")
+    @DisplayName("When I request an url I get a 200 status code")
     @ExtendWith(TimingExtension.class)
-    public void getRunType()  throws IOException{
+    void testGetRunType() throws AcrhoClientException {
         String type = as.getRunType("2356", "1041624601");
-        log.debug(type);
-        assertEquals("C", type);
-    }
-
-    @Test
-    //@DisplayName("")
-    @ExtendWith(TimingExtension.class)
-    public void getResult()  throws IOException{
-        as.getResult("2017", "2408");
+        LOG.debug(type);
+        assertEquals("C", type, "");
     }
 }

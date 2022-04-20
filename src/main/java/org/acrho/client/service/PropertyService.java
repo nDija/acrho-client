@@ -3,16 +3,17 @@ package org.acrho.client.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import org.acrho.client.model.property.AcrhoProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@Log4j2
 @Getter
-public class PropertyService {
+public final class PropertyService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class);
     private static PropertyService instance;
     private AcrhoProperties acrhoProperties;
 
@@ -28,11 +29,11 @@ public class PropertyService {
     }
 
     private void load() {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try( InputStream propertyFile = PropertyService.class.getClassLoader().getResourceAsStream("acrho.yml")){
+        var mapper = new ObjectMapper(new YAMLFactory());
+        try(InputStream propertyFile = Thread.currentThread().getContextClassLoader().getResourceAsStream("acrho.yml")){
             acrhoProperties = mapper.readValue(propertyFile, AcrhoProperties.class);
         } catch (IOException e) {
-            log.error("Can't load property file acrho.yml", e);
+            LOG.error("Can't load property file acrho.yml", e);
         }
     }
 }

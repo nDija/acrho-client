@@ -1,28 +1,26 @@
 package org.acrho.client.service;
 
-import lombok.extern.log4j.Log4j2;
-import org.acrho.client.util.AcrhoUtil;
+import org.acrho.client.AcrhoClientException;
 import org.acrho.client.model.AcrhoResult;
 import org.acrho.client.model.AcrhoRun;
 import org.acrho.client.model.AcrhoRunner;
 import org.acrho.client.model.property.AcrhoProperties;
 import org.acrho.client.model.property.QueryProperties;
-import org.apache.commons.io.IOUtils;
+import org.acrho.client.util.AcrhoUtil;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static javax.swing.text.html.HTML.Attribute.CLASS;
-import static javax.swing.text.html.HTML.Attribute.NAME;
-import static javax.swing.text.html.HTML.Attribute.VALUE;
+import static javax.swing.text.html.HTML.Attribute.*;
 import static javax.swing.text.html.HTML.Tag.*;
 import static org.acrho.client.AcrhoConstant.*;
 
@@ -32,11 +30,11 @@ import static org.acrho.client.AcrhoConstant.*;
  * @author Vincent Hullaert
  *
  */
-@Log4j2
 public class AcrhoService {
 
-	private AcrhoProperties ap = PropertyService.getInstance().getAcrhoProperties();
-	private static HttpService httpService = new HttpService();
+	private static final Logger LOG = LoggerFactory.getLogger(AcrhoService.class);
+
+	private final AcrhoProperties ap = PropertyService.getInstance().getAcrhoProperties();
 
 	/**
 	 * Get a list of runs by year
@@ -45,20 +43,19 @@ public class AcrhoService {
 	 * @return List of runs of the current year
 	 * @author Vincent Hullaert
 	 */
-	public List<AcrhoRun> getRuns(String year) throws IOException{
-		HttpURLConnection connection = HttpService.createConnection(ap.getBaseUrl() + "/" + ap.getRuns().getUri());
-		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRuns());
+	public List<AcrhoRun> getRuns(String year) throws AcrhoClientException {
+		var parameters = AcrhoUtil.getParameters(ap.getRuns());
 		parameters.put(ANT_FILTER_VALUE, year);
-		String response = post(connection, ap.getRuns(), parameters);
-		Elements options = Jsoup.parse(response)
+		var response = get(ap.getRuns(), parameters);
+		var options = Jsoup.parse(response)
 				.getElementsByAttributeValue(NAME.toString(), ANT_SEARCH_COURSES).get(0)
 				.getElementsByTag(OPTION.toString());
-		log.debug("Found courses: " + (options.size() - 1));
-		HttpService.closeConnection(connection);
+		if(LOG.isDebugEnabled())
+			LOG.debug(MessageFormat.format("Found courses: {0}", (options.size() - 1)));
 		return options.stream()
 				.filter(option -> !option.attr(VALUE.toString()).equals(STRING_0))
 				.map(AcrhoUtil::getRun)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	/**
@@ -66,30 +63,23 @@ public class AcrhoService {
 	 *
 	 * @param id
 	 *            The id of the run
-	 * @param year
-	 * 			  The year of the run
-	 * 			  Mandatory to switch variable session in Acrho.org
 	 * @return List of results for a run
 	 * @author Vincent Hullaert
 	 */
-	public List<AcrhoResult> getResult(String year, String id) throws IOException {
-		HttpURLConnection connection = HttpService.createConnection(ap.getBaseUrl() + "/" + ap.getRuns().getUri());
-		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRuns());
-		parameters.put(ANT_FILTER_VALUE, year);
-		post(connection, ap.getRuns(), parameters);
+	public List<AcrhoResult> getResult(String id) throws AcrhoClientException {
 
-		parameters = AcrhoUtil.getParameters(ap.getResults());
+		var parameters = AcrhoUtil.getParameters(ap.getResults());
 		parameters.put(ANT_FILTER_VALUE, id);
-		String response = post(connection, ap.getResults(), parameters);
-		Document doc = Jsoup.parse(response);
-		Elements trResults = doc.getElementsByAttributeValue(CLASS.toString(), SPERESULTS).get(0)
+		var response = post(ap.getResults(), parameters);
+		var doc = Jsoup.parse(response);
+		var trResults = doc.getElementsByAttributeValue(CLASS.toString(), SPERESULTS).get(0)
 				.getElementsByTag(TBODY).get(0).getElementsByTag(TR.toString());
 		trResults.remove(0);
-		log.debug("Results count: " + trResults.size());
-		HttpService.closeConnection(connection);
+		if(LOG.isDebugEnabled())
+			LOG.debug(MessageFormat.format("Results count: {0}", trResults.size()));
 		return trResults.stream()
 				.map(tr -> tr.getElementsByTag(TD.toString()))
-				.map(AcrhoUtil::getResult).collect(Collectors.toList());
+				.map(AcrhoUtil::getResult).toList();
 	}
 
 	/**
@@ -100,45 +90,47 @@ public class AcrhoService {
 	 * @return The details of the runner
 	 * @author Vincent Hullaert
 	 */
-	public AcrhoRunner getRunner(String id) throws IOException{
-		HttpURLConnection connection = HttpService.createConnection(ap.getBaseUrl() + "/" + ap.getRuns().getUri());
-		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRunner());
+	public AcrhoRunner getRunner(String id) throws AcrhoClientException {
+		var parameters = AcrhoUtil.getParameters(ap.getRunner());
 		parameters.put(CLE_DATA, id);
-		String response = post(connection, ap.getRunner(), parameters);
-		Document doc = Jsoup.parse(response);
+		var response = post(ap.getRunner(), parameters);
+		var doc = Jsoup.parse(response);
 		return AcrhoUtil.getRunner(doc);
 	}
 
-	public String getRunType(String runId, String runnerId) throws IOException{
-		HttpURLConnection connection = HttpService.createConnection(ap.getBaseUrl() + "/" + ap.getRuns().getUri());
+	public String getRunType(String runId, String runnerId) throws AcrhoClientException {
 		Map<String, String> parameters = AcrhoUtil.getParameters(ap.getRunner());
 		parameters.put(CLE_DATA, runnerId);
-		String response = post(connection, ap.getRunner(), parameters);
+		String response = post(ap.getRunner(), parameters);
 		Document doc = Jsoup.parse(response);
-		HttpService.closeConnection(connection);
 		return AcrhoUtil.getType(doc, runId);
 	}
-	/**
-	 *
-	 * @param qp The query from yaml file
-	 * @param parameters The request parameters cloned
-	 * @return The response as {@link String}
-	 */
-	private String post(HttpURLConnection connection, QueryProperties qp, Map<String, String> parameters) throws IOException{
-		String response = httpService.post(connection, parameters, ap.getPostRequest().getHeaders());
-		log.debug(response);
-		return response;
+
+	private String get(QueryProperties qp, Map<String, String> parameters)
+			throws AcrhoClientException {
+
+		List<NameValuePair> nvp = new ArrayList<>();
+		parameters.forEach((k,v) -> nvp.add(new BasicNameValuePair(k,v)));
+
+		return AcrhoHttpClient.get(
+				ap.getBaseUrl() + "/" + qp.getUri(),
+				ap.getGetRequest().getHeaders(),
+				nvp, ISO_8859_1
+		);
 	}
 
 	/**
 	 *
 	 * @param qp The query from yaml file
-	 * @param parameters The request parameters cloned
 	 * @return The response as {@link String}
 	 */
-	private String get(QueryProperties qp, Map<String, String> parameters) throws IOException{
-		String response  = httpService.get(ap.getBaseUrl() + "/" + qp.getUri(), parameters);
-		log.debug(response);
-		return response;
+	private String post(QueryProperties qp, Map<String, String> body)
+			throws AcrhoClientException {
+
+		return AcrhoHttpClient.post(
+				ap.getBaseUrl() + "/" + qp.getUri(),
+				ap.getPostRequest().getHeaders(),
+				null, body,
+				ISO_8859_1);
 	}
 }
