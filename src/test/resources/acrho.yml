@@ -62,6 +62,7 @@ years:
 getRequest:
   headers:
     User-Agent: Mozilla/5.0
+    Cookie: PHPSESSID=kltk6q6iompq9gs9iqpavvt891
 
 postRequest:
   headers:
@@ -69,11 +70,11 @@ postRequest:
     Accept-Encoding: gzip, deflate
     Accept-Language: fr-BE,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6
     Cache-Control: max-age=0
-    Connection: keep-alive
-    Content-Length: -1
+    #Connection: keep-alive
+    #Content-Length: -1
     #Content-Type: multipart/form-data; boundary=--------------------------940272926233422537416367
     Cookie: PHPSESSID=kltk6q6iompq9gs9iqpavvt891
-    Host: www.acrho.org
+    #Host: www.acrho.org
     Origin: http://www.acrho.org
     Referer: http://www.acrho.org/cust_resultats.php?langue=french&cle_menus=1187970092
     Upgrade-Insecure-Requests: 1

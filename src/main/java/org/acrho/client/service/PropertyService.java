@@ -11,10 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Getter
-public class PropertyService {
+public final class PropertyService {
 
-    Logger log = LoggerFactory.getLogger(PropertyService.class);
-
+    private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class);
     private static PropertyService instance;
     private AcrhoProperties acrhoProperties;
 
@@ -30,11 +29,11 @@ public class PropertyService {
     }
 
     private void load() {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try(InputStream propertyFile = PropertyService.class.getClassLoader().getResourceAsStream("acrho.yml")){
+        var mapper = new ObjectMapper(new YAMLFactory());
+        try(InputStream propertyFile = Thread.currentThread().getContextClassLoader().getResourceAsStream("acrho.yml")){
             acrhoProperties = mapper.readValue(propertyFile, AcrhoProperties.class);
         } catch (IOException e) {
-            log.error("Can't load property file acrho.yml", e);
+            LOG.error("Can't load property file acrho.yml", e);
         }
     }
 }

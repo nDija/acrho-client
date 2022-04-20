@@ -1,8 +1,8 @@
 package org.acrho.client;
 
-public class AcrhoClientException extends Exception{
+public class AcrhoClientException extends RuntimeException {
 
-    public AcrhoClientException(Exception e) {
+    public AcrhoClientException(Throwable e) {
         super(e);
     }
 }

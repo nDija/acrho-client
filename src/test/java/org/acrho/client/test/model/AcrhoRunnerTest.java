@@ -29,6 +29,7 @@ class AcrhoRunnerTest {
         rd.setCategory("V1");
         rd.setName("Vincent Hullaert");
         rd.setTeam("Cocoach");
+        rd.setId(460L);
         log.debug(rd.toString());
         assertEquals(rd1, rd);
     }

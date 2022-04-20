@@ -11,8 +11,7 @@ import org.acrho.client.service.PropertyService;
 import org.acrho.client.test.TimingExtension;
 import org.acrho.client.util.AcrhoUtil;
 import org.apache.commons.io.IOUtils;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,15 +21,12 @@ import org.mockserver.junit.jupiter.MockServerSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.acrho.client.AcrhoConstant.ANT_FILTER_VALUE;
 import static org.acrho.client.AcrhoConstant.CLE_DATA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,14 +43,14 @@ class AcrhoServiceTest {
 
     private final ClientAndServer client;
 
-    private final AcrhoProperties acrhoProperties = PropertyService.getInstance().getAcrhoProperties();
+    private static final AcrhoProperties acrhoProperties = PropertyService.getInstance().getAcrhoProperties();
 
     public AcrhoServiceTest(ClientAndServer client) {
         this.client = client;
     }
 
-    @BeforeEach
-    public void initMockServer(ClientAndServer client) throws IOException{
+    @BeforeAll
+    public static void initMockServer(ClientAndServer client) throws IOException{
         InputStream responseRuns = AcrhoServiceTest.class.getClassLoader()
                 .getResourceAsStream("acrho/acrho_runs_2017.html");
         InputStream responseResults = AcrhoServiceTest.class.getClassLoader()

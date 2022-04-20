@@ -16,14 +16,16 @@ import java.util.Map;
 
 public class HttpService {
 
-	Logger log = LoggerFactory.getLogger(HttpService.class);
-
+	private static final Logger LOG = LoggerFactory.getLogger(HttpService.class);
 	private static Proxy proxy;
 	private static final AcrhoProperties acrhoProperties = PropertyService.getInstance().getAcrhoProperties();
 
 	static {
 		if (acrhoProperties.getProxy() != null) {
-			proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(acrhoProperties.getProxy().getHost(), acrhoProperties.getProxy().getPort()));
+			proxy = new Proxy(
+					Proxy.Type.HTTP,
+					new InetSocketAddress(acrhoProperties.getProxy().getHost(),
+							acrhoProperties.getProxy().getPort()));
 		}
 	}
 
@@ -41,8 +43,8 @@ public class HttpService {
 			queryParameters = buildQueryParameters(parameters);
 		if(queryParameters != null)
 			url += queryParameters;
-		if(log.isDebugEnabled())
-			log.debug(MessageFormat.format("calling: {0}", url));
+		if(LOG.isDebugEnabled())
+			LOG.debug(MessageFormat.format("calling: {0}", url));
 		HttpURLConnection connection = buildUrl(url);
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
@@ -51,22 +53,20 @@ public class HttpService {
 
 	public InputStream post(String url, Map<String,String> parameters, Map<String, String> headers) throws IOException {
 		HttpURLConnection connection = buildUrl(url);
-		String data = buildQueryParameters(parameters).substring(1);
-		// add request header
+		var data = buildQueryParameters(parameters).substring(1);
 		connection.setRequestMethod("POST");
 		headers.forEach(connection::setRequestProperty);
 
-		// Send post request
 		connection.setDoOutput(true);
-		final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+		final var wr = new DataOutputStream(connection.getOutputStream());
 		wr.writeBytes(data);
 		wr.flush();
 		wr.close();
 
-		if(log.isDebugEnabled()) {
-			log.debug(MessageFormat.format("Sending 'POST' request to URL : {0}",url));
-			log.debug(MessageFormat.format("Post parameters : {0}", data));
-			log.debug(MessageFormat.format("Response Code : {0}", connection.getResponseCode()));
+		if(LOG.isDebugEnabled()) {
+			LOG.debug(MessageFormat.format("Sending 'POST' request to URL : {0}",url));
+			LOG.debug(MessageFormat.format("Post parameters : {0}", data));
+			LOG.debug(MessageFormat.format("Response Code : {0}", connection.getResponseCode()));
 		}
 		return connection.getInputStream();
 	}
@@ -80,7 +80,7 @@ public class HttpService {
 	}
 
 	public static String buildQueryParameters(Map<String, String> parameters) {
-		StringBuilder sb = new StringBuilder("?");
+		var sb = new StringBuilder("?");
 		parameters.forEach((k, v) -> sb.append(k).append("=").append(v).append("&"));
 		return sb.substring(0, sb.length() - 1);
 	}
