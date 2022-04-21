@@ -16,7 +16,7 @@ plugins {
 
 
 group = 'io.hullaert'
-version = '2.0.0-SNAPSHOT'
+version = '2.0.1-SNAPSHOT'
 
 java {
     toolchain {
@@ -84,9 +84,9 @@ publishing {
     repositories {
         maven {
             name = "mvn-repo"
-            url = uri("https://github.com/nDija/mvn-repo/snapshot")
+            url = uri("https://maven.pkg.github.com/ndija/mvn-repo")
             credentials {
-                username = project.property('gpr.user')
+                username = project.property('gpr.user') ?: System.getenv("GITHUB_USER")
                 password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
             }
         }
@@ -95,7 +95,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'io.hullaert'
             artifactId = 'acrho-client'
-            version = '2.0.0-SNAPSHOT'
+            version = '2.0.1-SNAPSHOT'
 
             from components.java
         }

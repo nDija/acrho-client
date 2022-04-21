@@ -14,6 +14,7 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.http.HttpResponse;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,22 @@ public class AcrhoService {
 	private static final Logger LOG = LoggerFactory.getLogger(AcrhoService.class);
 
 	private final AcrhoProperties ap = PropertyService.getInstance().getAcrhoProperties();
+
+	/**
+	 * Get a PHP session id
+	 *
+	 * @return A PHP session id
+	 * @author Vincent Hullaert
+	 */
+
+	public String getPHPSessId() {
+
+		return AcrhoHttpClient.getPHPSessId(
+				ap.getBaseUrl() + "/" + ap.getPhpsessid().getUri(),
+				ap.getGetRequest().getHeaders(),
+				null, ISO_8859_1
+		);
+	}
 
 	/**
 	 * Get a list of runs by year
@@ -113,6 +130,19 @@ public class AcrhoService {
 		parameters.forEach((k,v) -> nvp.add(new BasicNameValuePair(k,v)));
 
 		return AcrhoHttpClient.get(
+				ap.getBaseUrl() + "/" + qp.getUri(),
+				ap.getGetRequest().getHeaders(),
+				nvp, ISO_8859_1
+		);
+	}
+
+	private HttpResponse<String> getResponse(QueryProperties qp, Map<String, String> parameters)
+			throws AcrhoClientException {
+
+		List<NameValuePair> nvp = new ArrayList<>();
+		parameters.forEach((k,v) -> nvp.add(new BasicNameValuePair(k,v)));
+
+		return AcrhoHttpClient.getResponse(
 				ap.getBaseUrl() + "/" + qp.getUri(),
 				ap.getGetRequest().getHeaders(),
 				nvp, ISO_8859_1

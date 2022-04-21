@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class AcrhoProperties {
 
     private String baseUrl;
+    private QueryProperties phpsessid;
     private QueryProperties results;
     private QueryProperties runs;
     private QueryProperties runner;
